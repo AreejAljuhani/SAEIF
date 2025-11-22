@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add interactions
     setupProfessionalInteractions();
+    setupNavigation();
 });
 
 // Initialize dashboard data
@@ -56,13 +57,82 @@ function setupProfessionalInteractions() {
     // Add smooth interactions for all stat cards
     document.querySelectorAll('.stat-action').forEach(action => {
         action.addEventListener('click', function() {
-            //click feedback
+            const actionType = this.getAttribute('data-action');
+            handleStatAction(actionType);
+            
+            // Click feedback
             this.style.transform = 'scale(0.98)';
             setTimeout(() => {
                 this.style.transform = '';
             }, 150);
         });
     });
+}
+
+function setupNavigation() {
+    // Setup sidebar navigation
+    const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
+    
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Remove active class from all items
+            navItems.forEach(nav => nav.classList.remove('active'));
+            
+            // Add active class to clicked item
+            this.classList.add('active');
+            
+            const page = this.getAttribute('data-page');
+            handleNavigation(page);
+        });
+    });
+}
+
+function handleNavigation(page) {
+    console.log('Navigating to:', page);
+    
+    switch(page) {
+        case 'home':
+            // Already on home page
+            break;
+        case 'registration':
+            window.location.href = 'patient-registration.html';
+            break;
+        case 'patient-list':
+            // Will be implemented later
+            alert('Patient List page will be implemented soon');
+            break;
+        case 'iot-monitoring':
+            // Will be implemented later
+            alert('IOT Monitoring page will be implemented soon');
+            break;
+        case 'alerts':
+            // Will be implemented later
+            alert('Alerts page will be implemented soon');
+            break;
+        default:
+            console.log('Unknown page:', page);
+    }
+}
+
+function handleStatAction(action) {
+    console.log('Stat action triggered:', action);
+    
+    switch(action) {
+        case 'patient-list':
+            // Navigate to patient list
+            document.querySelector('[data-page="patient-list"]').click();
+            break;
+        case 'iot-monitoring':
+            // Navigate to IOT monitoring
+            document.querySelector('[data-page="iot-monitoring"]').click();
+            break;
+        case 'alerts':
+            // Navigate to alerts
+            document.querySelector('[data-page="alerts"]').click();
+            break;
+        default:
+            console.log('Unknown action:', action);
+    }
 }
 
 // API integration for CTAS data

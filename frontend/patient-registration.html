@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saeif - Patient Registration</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/patient-registration.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Saeif</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="home.html" class="nav-item" data-page="home">
+                    <i class="fas fa-home nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Home</span>
+                </a>
+                <a href="patient-registration.html" class="nav-item active" data-page="registration">
+                    <i class="fas fa-user-plus nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Patient registration</span>
+                </a>
+                <a href="#" class="nav-item" data-page="patient-list">
+                    <i class="fas fa-list-ul nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Patient list</span>
+                </a>
+                <a href="#" class="nav-item" data-page="iot-monitoring">
+                    <i class="fas fa-heartbeat nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">IOT monitoring</span>
+                </a>
+                <a href="#" class="nav-item" data-page="alerts">
+                    <i class="fas fa-bell nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Alerts</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <header class="page-header">
+                <h1 class="page-title">Patient Registration</h1>
+                <p class="page-subtitle">Enter new patient information</p>
+            </header>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="success-message">
+                <i class="fas fa-check-circle"></i> Patient registered successfully!
+            </div>
+
+            <!-- Registration Form -->
+            <form class="registration-form" id="patientForm">
+                <!-- Personal Information Section -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-user"></i>
+                        Personal information
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="userName" class="form-label required-field">User Name</label>
+                            <input type="text" id="userName" name="userName" class="form-input" placeholder="Enter patient name" required>
+                            <div class="error-message" id="userNameError">Please enter patient name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateOfBirth" class="form-label required-field">Date of Birth</label>
+                            <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-input" required>
+                            <div class="error-message" id="dateOfBirthError">Please select date of birth</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender" class="form-label required-field">Gender</label>
+                            <select id="gender" name="gender" class="form-select" required>
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            <div class="error-message" id="genderError">Please select gender</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Vital Signs Section -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-heartbeat"></i>
+                        Vital signs
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="heartRate" class="form-label required-field">Heart rate</label>
+                            <input type="number" id="heartRate" name="heartRate" class="form-input" placeholder="bpm" required>
+                            <div class="error-message" id="heartRateError">Please enter heart rate</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="bloodPressure" class="form-label required-field">Blood Pressure</label>
+                            <input type="text" id="bloodPressure" name="bloodPressure" class="form-input" placeholder="e.g., 120/80" required>
+                            <div class="error-message" id="bloodPressureError">Please enter blood pressure</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="oxygenSaturation" class="form-label required-field">Oxygen Saturation</label>
+                            <input type="number" id="oxygenSaturation" name="oxygenSaturation" class="form-input" placeholder="%" min="0" max="100" required>
+                            <div class="error-message" id="oxygenSaturationError">Please enter oxygen saturation</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="temperature" class="form-label required-field">Temperature</label>
+                            <input type="number" id="temperature" name="temperature" class="form-input" placeholder="°C" step="0.1" required>
+                            <div class="error-message" id="temperatureError">Please enter temperature</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Symptoms Section -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-file-medical"></i>
+                        Main symptoms and complaints
+                    </h2>
+                    <div class="form-group">
+                        <textarea id="symptoms" name="symptoms" class="form-textarea" placeholder="Describe patient's symptoms, complaints, and medical history..." rows="4" required></textarea>
+                        <div class="error-message" id="symptomsError">Please describe patient symptoms</div>
+                    </div>
+                </section>
+
+                <!-- Form Actions -->
+                <section class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="clearButton">
+                        <i class="fas fa-times"></i>
+                        Clear Form
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="submitButton">
+                        <i class="fas fa-save"></i>
+                        Register Patient
+                    </button>
+                </section>
+            </form>
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/patient-registration.js"></script>
+</body>
+</html>
