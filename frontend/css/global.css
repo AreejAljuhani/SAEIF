@@ -1,0 +1,139 @@
+/* ===== RESET أساسي ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== متغيرات الألوان المشتركة ===== */
+:root {
+  --primary-blue: #1a365d;
+  --primary-light: #2d5b8a;
+
+  --sidebar-bg: #1a202c;
+  --sidebar-text: #e2e8f0;
+  --sidebar-hover: #2d3748;
+
+  --background: #eaf2f2;
+  --card-bg: #ffffff;
+  --text-dark: #111827;
+  --text-light: #6b7280;
+  --border-color: #e5e7eb;
+  --white: #ffffff;
+
+  --shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 8px 22px rgba(0, 0, 0, 0.10);
+}
+
+/* ===== body + layout العام ===== */
+body {
+  font-family: "Inter", sans-serif;
+  background: var(--background);
+  color: var(--text-dark);
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ===== Sidebar مشترك ===== */
+.sidebar {
+    width: 260px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+.logo {
+  border-bottom: 1px solid #2d3748;
+  margin-bottom: 1.5rem;
+  padding: 0.25rem 0 1rem 0; /* فراغ أقل من فوق */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 120px
+}
+
+.logo-img {
+  max-width: 80%;
+  height: auto;
+  display: block;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 0 1rem;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: var(--sidebar-text);
+  border-radius: 6px;
+  transition: 0.2s;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.nav-item:hover {
+  background: var(--sidebar-hover);
+  color: #fff;
+}
+
+.nav-item.active {
+  background: var(--primary-blue);
+  color: #fff;
+}
+
+.nav-icon {
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+  opacity: 0.85;
+}
+
+/* قسم الخريطة في الأسفل */
+.sidebar-footer {
+    width: 100%;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar-map {
+    width: 85%;
+    max-width: 180px;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+}
+
+.sidebar-map:hover {
+    opacity: 0.9;
+}
+
+/* ===== مساحة المحتوى الرئيسية ===== */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+}
+
+/* panel أساسي (تقدرين تستخدمينه في كل الصفحات) */
+.panel {
+  width: min(980px, 92%);
+  background: var(--card-bg);
+  border-radius: 26px;
+  padding: 2.5rem 3rem;
+  box-shadow: var(--shadow);
+}

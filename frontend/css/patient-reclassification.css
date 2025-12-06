@@ -1,0 +1,255 @@
+/* ===== Layout ===== */
+
+.main-content {
+  display: grid;
+  place-items: center;
+}
+
+.panel {
+  padding: 2.5rem 3rem;
+}
+
+/* ===== Page Header ===== */
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.panel-header h1 {
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.cancel-link {
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cancel-link:hover {
+  color: #111827;
+}
+
+/* ===== Patient Info Card ===== */
+.patient-mini {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  display: grid;
+  place-items: center;
+  color: #6b7280;
+}
+
+.patient-info {
+  margin-left: -0.1rem;
+}
+
+.patient-info .name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.2rem;
+}
+
+.patient-name {
+  font-weight: 700;
+}
+
+.tag {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: #ede9fe;
+  color: #7c3aed;
+  font-weight: 600;
+}
+
+.meta {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-top: 0.15rem;
+}
+
+.current {
+  margin-left: -4.0rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.1rem;
+}
+
+.ctas-pill {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  background: #ef4444;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  margin-right: 0.2rem;
+}
+
+.current-label {
+  font-size: 0.8rem;
+  margin-left: 0.25rem;
+  color: var(--text-light);
+}
+
+.chief-complaint {
+  margin-top: 1rem;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 1.2rem 0 1.5rem;
+}
+
+/* ===== CTAS Selection ===== */
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.ctas-levels {
+  display: flex;
+  gap: 18px;
+  margin: 14px 0 24px;
+  flex-wrap: wrap;
+}
+
+.ctas-box {
+  width: 140px;
+  height: 76px;
+  border-radius: 10px;
+  background: #fff;
+  border: 2px solid transparent;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CTAS Colors */
+.ctas-box[data-level="1"] {
+  border-color: #ff3b30;
+  color: #ff3b30;
+}
+
+.ctas-box[data-level="2"] {
+  border-color: #ff9f0a;
+  color: #ff9f0a;
+}
+
+.ctas-box[data-level="3"] {
+  border-color: #ffd60a;
+  color: #ffd60a;
+}
+
+.ctas-box[data-level="4"] {
+  border-color: #34c759;
+  color: #34c759;
+}
+
+.ctas-box[data-level="5"] {
+  border-color: #5856d6;
+  color: #5856d6;
+}
+
+.ctas-box.selected {
+  background: #ff3b30;
+  border-color: #ff3b30;
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(255, 59, 48, 0.25);
+}
+
+.ctas-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== Form Fields ===== */
+.field {
+  margin-bottom: 1.2rem;
+}
+
+.field label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  font-size: 1rem;
+}
+
+.field textarea {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition: 0.2s;
+}
+
+.field textarea:focus {
+  border-color: #5b3df5;
+  box-shadow: 0 0 0 3px rgba(91, 61, 245, 0.12);
+}
+
+/* ===== Action Button ===== */
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  width: 320px;
+  padding: 1rem 1.2rem;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  background: #5b3df5;
+  color: #fff;
+  transition: 0.2s;
+  box-shadow: 0 8px 20px rgba(91, 61, 245, 0.25);
+}
+
+.btn:hover {
+  background: #4a2fe0;
+  transform: translateY(-1px);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+  .panel {
+    padding: 1.8rem;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

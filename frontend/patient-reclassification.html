@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saeif - Patient Reclassification</title>
+
+   <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/patient-reclassification.css" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="container">
+    
+    <!-- Main Navigation Sidebar -->
+    <aside class="sidebar">
+      <!-- Logo -->
+      <div class="logo">
+        <img src="assets/saeif-logo1.png" alt="Saeif Logo" class="logo-img">
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="home.html" class="nav-item">
+          <i class="fas fa-home nav-icon"></i>
+          <span class="nav-text">Home</span>
+        </a>
+
+        <a href="show-result.html" class="nav-item active">
+          <i class="fas fa-folder-open nav-icon"></i>
+          <span class="nav-text">Emergency Triage</span>
+        </a>
+
+        <a href="patient-list.html" class="nav-item">
+          <i class="fas fa-file-alt nav-icon"></i>
+          <span class="nav-text">ED Patient Board</span>
+        </a>
+
+        <a href="iot-monitoring.html" class="nav-item">
+          <i class="fas fa-heartbeat nav-icon"></i>
+          <span class="nav-text">Vital Signs Monitoring</span>
+        </a>
+
+        <a href="alerts.html" class="nav-item">
+          <i class="fas fa-bell nav-icon"></i>
+          <span class="nav-text">Clinical Alerts</span>
+        </a>
+      </nav>
+
+      <!-- Map Icon -->
+      <div class="sidebar-footer">
+        <img src="assets/map-icon.png" alt="World map" class="sidebar-map">
+      </div>
+    </aside>
+
+
+    <!-- Main -->
+    <main class="main-content">
+      <section class="panel">
+        <div class="panel-header">
+          <h1>CTAS Patient Reclassification</h1>
+          <a href="show-result.html" class="cancel-link">Cancel <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- Patient Info Card -->
+        <div class="patient-mini">
+          <div class="avatar"><i class="fa-regular fa-user"></i></div>
+          <div class="patient-info">
+            <div class="name-row">
+              <span class="patient-name">Sarah khalid</span>
+              <span class="tag">Under treatment</span>
+            </div>
+            <div class="meta">43 years old • Female</div>
+            <div class="meta">Patient Number #1</div>
+            <div class="current">
+              <span class="ctas-pill">CTAS - 1</span>
+              <span class="current-label">Current Classification</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chief-complaint">
+          <div class="chief-title">Chief Complaint</div>
+          <div class="chief-text">Chest pain and shortness of breath</div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- CTAS Level Selection -->
+        <h2 class="section-title">Select the new level</h2>
+
+        <div class="ctas-levels">
+          <button class="ctas-box selected" data-level="1">CTAS - 1</button>
+          <button class="ctas-box" data-level="2">CTAS - 2</button>
+          <button class="ctas-box" data-level="3">CTAS - 3</button>
+          <button class="ctas-box" data-level="4">CTAS - 4</button>
+          <button class="ctas-box" data-level="5">CTAS - 5</button>
+        </div>
+
+
+        <!-- Reason for Reclassification -->
+        <div class="field">
+          <label>Reason for Reclassification</label>
+          <textarea placeholder="Writing down the reason for reclassification"></textarea>
+        </div>
+
+        <!-- Additional Notes -->
+        <div class="field">
+          <label>Additional Notes (Optional)</label>
+          <textarea
+            placeholder="Write any additional notes that help document the reason for reclassification..."></textarea>
+        </div>
+
+        <!-- Action Button -->
+        <div class="actions">
+          <button class="btn primary">Confirm Reclassification</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="js/patient-reclassification.js"></script>
+</body>
+
+</html>

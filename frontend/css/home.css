@@ -1,115 +1,6 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --primary-blue: #1a365d;
-    --primary-light: #2d5b8a;
-    --sidebar-bg: #1a202c;
-    --sidebar-text: #e2e8f0;
-    --sidebar-hover: #2d3748;
-    --patient-count: #3182ce;
-    --observation: #805ad5;
-    --alerts: #e53e3e;
-    
-    /* CTAS Colors */
-    --critical: #e53e3e;      /* CTAS 1 - Red */
-    --emergency: #dd6b20;     /* CTAS 2 - Orange */
-    --urgent: #d69e2e;        /* CTAS 3 - Yellow */
-    --less-urgent: #38a169;   /* CTAS 4 - Green */
-    --non-urgent: #3182ce;    /* CTAS 5 - Blue */
-    --waiting-time: #718096;  /* Neutral for waiting time */
-    
-    --background: #f7fafc;
-    --card-bg: #ffffff;
-    --text-dark: #2d3748;
-    --text-light: #718096;
-    --text-lighter: #a0aec0;
-    --white: #ffffff;
-    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    --shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--background);
-    color: var(--text-dark);
-    line-height: 1.5;
-    font-weight: 400;
-}
-
-.container {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* Sidebar Styles */
-.sidebar {
-    width: 260px;
-    background: var(--sidebar-bg);
-    color: var(--sidebar-text);
-    padding: 2rem 0;
-}
-
-.logo {
-    padding: 0 2rem 1.5rem 2rem;
-    border-bottom: 1px solid #2d3748;
-    margin-bottom: 1.5rem;
-}
-
-.logo h1 {
-    color: var(--white);
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-}
-
-.sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0 1rem;
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    text-decoration: none;
-    color: var(--sidebar-text);
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    font-weight: 500;
-    font-size: 0.9rem;
-}
-
-.nav-item:hover {
-    background: var(--sidebar-hover);
-    color: var(--white);
-}
-
-.nav-item.active {
-    background: var(--primary-blue);
-    color: var(--white);
-}
-
-.nav-icon {
-    font-size: 1rem;
-    width: 20px;
-    text-align: center;
-    opacity: 0.8;
-}
-
-/* Main Content */
-.main-content {
-    flex: 1;
-    padding: 2rem;
-    background: var(--background);
-    overflow-y: auto;
-}
+/* =========================
+   HOME PAGE STYLES ONLY
+   ========================= */
 
 /* Patient Stats Section */
 .patient-stats-section {
@@ -142,7 +33,6 @@ body {
     font-size: 2.25rem;
     font-weight: 700;
     margin-bottom: 0.25rem;
-    font-family: 'Inter', sans-serif;
 }
 
 .stat-label {
@@ -175,10 +65,21 @@ body {
     transform: translateX(2px);
 }
 
-/* Patient Stats Colors */
-.patient-count { border-left-color: var(--patient-count); color: var(--patient-count); }
-.observation { border-left-color: var(--observation); color: var(--observation); }
-.alerts { border-left-color: var(--alerts); color: var(--alerts); }
+/* Cards colors */
+.patient-count {
+    border-left-color: #3182ce;
+    color: #3182ce;
+}
+
+.observation {
+    border-left-color: #805ad5;
+    color: #805ad5;
+}
+
+.alerts {
+    border-left-color: #e53e3e;
+    color: #e53e3e;
+}
 
 /* Emergency Overview */
 .emergency-overview {
@@ -194,7 +95,7 @@ body {
     font-weight: 600;
     margin-bottom: 1.25rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .emergency-stats-grid {
@@ -207,7 +108,7 @@ body {
     padding: 1.25rem 0.75rem;
     border-radius: 6px;
     transition: all 0.2s ease;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
     background: var(--card-bg);
     min-height: 90px;
     display: flex;
@@ -237,7 +138,6 @@ body {
 .emergency-stat-number {
     font-size: 1.4rem;
     font-weight: 700;
-    font-family: 'Inter', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -248,88 +148,64 @@ body {
     font-size: 0.65rem;
     font-weight: 500;
     color: var(--text-light);
-    text-transform: lowercase;
 }
 
-/* Emergency Stats Colors */
-.critical { 
-    border-top: 3px solid var(--critical);
+/* CTAS colors */
+.critical {
+    border-top: 3px solid #e53e3e;
     background: linear-gradient(135deg, #fff5f5, #fed7d7);
 }
-.critical .emergency-stat-number { color: var(--critical); }
 
-.emergency { 
-    border-top: 3px solid var(--emergency);
+.emergency {
+    border-top: 3px solid #dd6b20;
     background: linear-gradient(135deg, #fffaf0, #feebc8);
 }
-.emergency .emergency-stat-number { color: var(--emergency); }
 
-.urgent { 
-    border-top: 3px solid var(--urgent);
+.urgent {
+    border-top: 3px solid #d69e2e;
     background: linear-gradient(135deg, #fffff0, #fefcbf);
 }
-.urgent .emergency-stat-number { color: var(--urgent); }
 
-.less-urgent { 
-    border-top: 3px solid var(--less-urgent);
+.less-urgent {
+    border-top: 3px solid #38a169;
     background: linear-gradient(135deg, #f0fff4, #c6f6d5);
 }
-.less-urgent .emergency-stat-number { color: var(--less-urgent); }
 
-.non-urgent { 
-    border-top: 3px solid var(--non-urgent);
+.non-urgent {
+    border-top: 3px solid #3182ce;
     background: linear-gradient(135deg, #ebf8ff, #bee3f8);
 }
-.non-urgent .emergency-stat-number { color: var(--non-urgent); }
 
-.waiting-time { 
-    border-top: 3px solid var(--waiting-time);
+.waiting-time {
+    border-top: 3px solid #718096;
     background: linear-gradient(135deg, #f7fafc, #edf2f7);
 }
-.waiting-time .emergency-stat-number { color: var(--waiting-time); }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
-    .emergency-stats-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+.critical .emergency-stat-number {
+    color: #e53e3e;
 }
 
-@media (max-width: 1024px) {
-    .container {
-        flex-direction: column;
-    }
-    
-    .sidebar {
-        width: 100%;
-        padding: 1rem 0;
-    }
-    
-    .sidebar-nav {
-        flex-direction: row;
-        overflow-x: auto;
-        padding: 0 1rem;
-        gap: 0.5rem;
-    }
-    
-    .nav-item {
-        white-space: nowrap;
-        flex: 1;
-        justify-content: center;
-        padding: 0.5rem 0.75rem;
-        min-width: 80px;
-    }
-    
-    .nav-text {
-        font-size: 0.8rem;
-    }
-    
-    .logo {
-        text-align: center;
-        padding: 0 1rem 1rem 1rem;
-    }
+.emergency .emergency-stat-number {
+    color: #dd6b20;
 }
 
+.urgent .emergency-stat-number {
+    color: #d69e2e;
+}
+
+.less-urgent .emergency-stat-number {
+    color: #38a169;
+}
+
+.non-urgent .emergency-stat-number {
+    color: #3182ce;
+}
+
+.waiting-time .emergency-stat-number {
+    color: #718096;
+}
+
+/* Responsive home only */
 @media (max-width: 900px) {
     .emergency-stats-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -337,78 +213,18 @@ body {
 }
 
 @media (max-width: 768px) {
-    .main-content {
-        padding: 1.25rem;
-    }
-    
     .patient-stats-section {
         grid-template-columns: 1fr;
-        gap: 1rem;
     }
-    
+
     .emergency-stats-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 0.75rem;
     }
-    
-    .stat-card {
-        padding: 1.25rem;
-    }
-    
-    .emergency-stat-card {
-        padding: 1rem 0.5rem;
-        min-height: 80px;
-    }
-    
-    .stat-number {
-        font-size: 2rem;
-    }
-    
-    .emergency-stat-number {
-        font-size: 1.3rem;
-    }
-    
-    .section-title {
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
-    }
-    
-    .emergency-stat-label {
-        font-size: 0.65rem;
-    }
 }
 
 @media (max-width: 480px) {
-    .main-content {
-        padding: 1rem;
-    }
-    
     .emergency-stats-grid {
         grid-template-columns: 1fr;
-    }
-    
-    .section-title {
-        font-size: 1rem;
-    }
-    
-    .nav-item {
-        padding: 0.5rem;
-        font-size: 0.8rem;
-    }
-    
-    .nav-text {
-        display: none;
-    }
-    
-    .nav-icon {
-        margin: 0 auto;
-    }
-    
-    .emergency-stat-card {
-        min-height: 70px;
-    }
-    
-    .emergency-stat-number {
-        font-size: 1.2rem;
     }
 }

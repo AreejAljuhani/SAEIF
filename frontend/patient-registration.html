@@ -1,47 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saeif - Patient Registration</title>
-    
+
     <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/global.css" />
     <link rel="stylesheet" href="css/patient-registration.css">
+
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div class="container">
-        <!-- Sidebar -->
+        
+        <!-- Main Navigation Sidebar -->
         <aside class="sidebar">
+             <!-- Logo -->
             <div class="logo">
-                <h1>Saeif</h1>
+                <img src="assets/saeif-logo1.png" alt="Saeif Logo" class="logo-img">
             </div>
+
             <nav class="sidebar-nav">
-                <a href="home.html" class="nav-item" data-page="home">
-                    <i class="fas fa-home nav-icon" aria-hidden="true"></i>
+                <a href="home.html" class="nav-item">
+                    <i class="fas fa-home nav-icon"></i>
                     <span class="nav-text">Home</span>
                 </a>
-                <a href="patient-registration.html" class="nav-item active" data-page="registration">
-                    <i class="fas fa-user-plus nav-icon" aria-hidden="true"></i>
-                    <span class="nav-text">Patient registration</span>
+
+                <a href="show-result.html" class="nav-item">
+                    <i class="fas fa-folder-open nav-icon"></i>
+                    <span class="nav-text">Emergency Triage</span>
                 </a>
-                <a href="#" class="nav-item" data-page="patient-list">
-                    <i class="fas fa-list-ul nav-icon" aria-hidden="true"></i>
-                    <span class="nav-text">Patient list</span>
+
+                <a href="patient-list.html" class="nav-item">
+                    <i class="fas fa-file-alt nav-icon"></i>
+                    <span class="nav-text">ED Patient Board</span>
                 </a>
-                <a href="#" class="nav-item" data-page="iot-monitoring">
-                    <i class="fas fa-heartbeat nav-icon" aria-hidden="true"></i>
-                    <span class="nav-text">IOT monitoring</span>
+
+                <a href="iot-monitoring.html" class="nav-item">
+                    <i class="fas fa-heartbeat nav-icon"></i>
+                    <span class="nav-text">Vital Signs Monitoring</span>
                 </a>
-                <a href="#" class="nav-item" data-page="alerts">
-                    <i class="fas fa-bell nav-icon" aria-hidden="true"></i>
-                    <span class="nav-text">Alerts</span>
+
+                <a href="alerts.html" class="nav-item">
+                    <i class="fas fa-bell nav-icon"></i>
+                    <span class="nav-text">Clinical Alerts</span>
                 </a>
             </nav>
+
+            <!-- Map Icon -->
+            <div class="sidebar-footer">
+                <img src="assets/map-icon.png" alt="World map" class="sidebar-map">
+            </div>
         </aside>
+
 
         <!-- Main Content -->
         <main class="main-content">
@@ -67,7 +84,8 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="userName" class="form-label required-field">User Name</label>
-                            <input type="text" id="userName" name="userName" class="form-input" placeholder="Enter patient name" required>
+                            <input type="text" id="userName" name="userName" class="form-input"
+                                placeholder="Enter patient name" required>
                             <div class="error-message" id="userNameError">Please enter patient name</div>
                         </div>
                         <div class="form-group">
@@ -96,22 +114,26 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="heartRate" class="form-label required-field">Heart rate</label>
-                            <input type="number" id="heartRate" name="heartRate" class="form-input" placeholder="bpm" required>
+                            <input type="number" id="heartRate" name="heartRate" class="form-input" placeholder="bpm"
+                                required>
                             <div class="error-message" id="heartRateError">Please enter heart rate</div>
                         </div>
                         <div class="form-group">
                             <label for="bloodPressure" class="form-label required-field">Blood Pressure</label>
-                            <input type="text" id="bloodPressure" name="bloodPressure" class="form-input" placeholder="e.g., 120/80" required>
+                            <input type="text" id="bloodPressure" name="bloodPressure" class="form-input"
+                                placeholder="e.g., 120/80" required>
                             <div class="error-message" id="bloodPressureError">Please enter blood pressure</div>
                         </div>
                         <div class="form-group">
                             <label for="oxygenSaturation" class="form-label required-field">Oxygen Saturation</label>
-                            <input type="number" id="oxygenSaturation" name="oxygenSaturation" class="form-input" placeholder="%" min="0" max="100" required>
+                            <input type="number" id="oxygenSaturation" name="oxygenSaturation" class="form-input"
+                                placeholder="%" min="0" max="100" required>
                             <div class="error-message" id="oxygenSaturationError">Please enter oxygen saturation</div>
                         </div>
                         <div class="form-group">
                             <label for="temperature" class="form-label required-field">Temperature</label>
-                            <input type="number" id="temperature" name="temperature" class="form-input" placeholder="°C" step="0.1" required>
+                            <input type="number" id="temperature" name="temperature" class="form-input" placeholder="°C"
+                                step="0.1" required>
                             <div class="error-message" id="temperatureError">Please enter temperature</div>
                         </div>
                     </div>
@@ -124,7 +146,9 @@
                         Main symptoms and complaints
                     </h2>
                     <div class="form-group">
-                        <textarea id="symptoms" name="symptoms" class="form-textarea" placeholder="Describe patient's symptoms, complaints, and medical history..." rows="4" required></textarea>
+                        <textarea id="symptoms" name="symptoms" class="form-textarea"
+                            placeholder="Describe patient's symptoms, complaints, and medical history..." rows="4"
+                            required></textarea>
                         <div class="error-message" id="symptomsError">Please describe patient symptoms</div>
                     </div>
                 </section>
@@ -147,4 +171,5 @@
     <!-- JavaScript -->
     <script src="js/patient-registration.js"></script>
 </body>
+
 </html>
