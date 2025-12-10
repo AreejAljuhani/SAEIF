@@ -139,6 +139,60 @@
   opacity: 1;
 }
 
+/* ===== Patient Info Summary ===== */
+.patient-info-summary {
+  background: #f3f4f6;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  text-align: left;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row .label {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.info-row .value {
+  color: var(--text-light);
+}
+
+/* ===== Confidence Box ===== */
+.confidence-box {
+  background: #e0f2fe;
+  border-left: 4px solid #0284c7;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.confidence-label {
+  font-size: 0.9rem;
+  color: #0c4a6e;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.confidence-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0284c7;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   .panel {

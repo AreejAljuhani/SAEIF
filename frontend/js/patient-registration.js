@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Setup event listeners
     setupEventListeners();
-    setupNavigation();
 });
 
 function initializeForm() {
@@ -87,17 +86,32 @@ function handleFormSubmit(event) {
 function getFormData() {
     return {
         personalInfo: {
-            userName: document.getElementById('userName').value,
-            dateOfBirth: document.getElementById('dateOfBirth').value,
-            gender: document.getElementById('gender').value
+            name: document.getElementById('name').value,
+            sex: document.getElementById('sex').value,
+            age: document.getElementById('age').value,
+            dateOfBirth: document.getElementById('dateOfBirth').value
+        },
+        arrivalInfo: {
+            group: document.getElementById('group').value,
+            arrival_mode: document.getElementById('arrival_mode').value
+        },
+        clinicalAssessment: {
+            injury: document.getElementById('injury').value,
+            mental: document.getElementById('mental').value,
+            pain: document.getElementById('pain').value,
+            nrs_pain: document.getElementById('nrs_pain').value
         },
         vitalSigns: {
-            heartRate: document.getElementById('heartRate').value,
-            bloodPressure: document.getElementById('bloodPressure').value,
-            oxygenSaturation: document.getElementById('oxygenSaturation').value,
-            temperature: document.getElementById('temperature').value
+            saturation: document.getElementById('saturation').value,
+            bt: document.getElementById('bt').value,
+            rr: document.getElementById('rr').value,
+            hr: document.getElementById('hr').value,
+            dbp: document.getElementById('dbp').value,
+            sbp: document.getElementById('sbp').value
         },
-        symptoms: document.getElementById('symptoms').value
+        chiefComplaint: {
+            chief_complain: document.getElementById('chief_complain').value
+        }
     };
 }
 
@@ -106,30 +120,43 @@ function validateForm() {
     
     // Required fields validation
     const requiredFields = [
-        'userName', 'dateOfBirth', 'gender', 'heartRate', 
-        'bloodPressure', 'oxygenSaturation', 'temperature', 'symptoms'
+        'name', 'sex', 'age', 'dateOfBirth',
+        'group', 'arrival_mode', 
+        'injury', 'mental', 'pain', 'nrs_pain',
+        'saturation', 'bt', 'rr', 'hr', 'dbp', 'sbp',
+        'chief_complain'
     ];
     
     requiredFields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
-        if (!field.value.trim()) {
-            showError(field, fieldId + 'Error', 'This field is required');
+        if (!field || !field.value.toString().trim()) {
+            if (field) {
+                showError(field, fieldId + 'Error', 'This field is required');
+            }
             isValid = false;
         } else {
-            clearError(field, fieldId + 'Error');
+            if (field) {
+                clearError(field, fieldId + 'Error');
+            }
         }
     });
     
     // Additional validation for specific fields
-    const heartRate = document.getElementById('heartRate').value;
-    if (heartRate && (heartRate < 30 || heartRate > 200)) {
-        showError(document.getElementById('heartRate'), 'heartRateError', 'Please enter a valid heart rate (30-200 bpm)');
+    const hr = parseFloat(document.getElementById('hr').value);
+    if (hr && (hr < 30 || hr > 200)) {
+        showError(document.getElementById('hr'), 'hrError', 'Please enter a valid heart rate (30-200 bpm)');
         isValid = false;
     }
     
-    const oxygen = document.getElementById('oxygenSaturation').value;
-    if (oxygen && (oxygen < 0 || oxygen > 100)) {
-        showError(document.getElementById('oxygenSaturation'), 'oxygenSaturationError', 'Please enter valid oxygen saturation (0-100%)');
+    const saturation = parseFloat(document.getElementById('saturation').value);
+    if (saturation && (saturation < 0 || saturation > 100)) {
+        showError(document.getElementById('saturation'), 'saturationError', 'Please enter valid saturation (0-100%)');
+        isValid = false;
+    }
+    
+    const nrs_pain = parseFloat(document.getElementById('nrs_pain').value);
+    if (nrs_pain && (nrs_pain < 0 || nrs_pain > 10)) {
+        showError(document.getElementById('nrs_pain'), 'nrs_painError', 'Please enter valid pain scale (0-10)');
         isValid = false;
     }
     
@@ -141,18 +168,31 @@ function validateField(event) {
     const fieldId = field.id;
     const errorId = fieldId + 'Error';
     
-    if (!field.value.trim()) {
+    if (!field.value.toString().trim()) {
         showError(field, errorId, 'This field is required');
     } else {
         clearError(field, errorId);
         
         // Additional field-specific validation
-        if (fieldId === 'heartRate' && (field.value < 30 || field.value > 200)) {
-            showError(field, errorId, 'Please enter a valid heart rate (30-200 bpm)');
+        if (fieldId === 'hr') {
+            const value = parseFloat(field.value);
+            if (value && (value < 30 || value > 200)) {
+                showError(field, errorId, 'Please enter a valid heart rate (30-200 bpm)');
+            }
         }
         
-        if (fieldId === 'oxygenSaturation' && (field.value < 0 || field.value > 100)) {
-            showError(field, errorId, 'Please enter valid oxygen saturation (0-100%)');
+        if (fieldId === 'saturation') {
+            const value = parseFloat(field.value);
+            if (value && (value < 0 || value > 100)) {
+                showError(field, errorId, 'Please enter valid saturation (0-100%)');
+            }
+        }
+        
+        if (fieldId === 'nrs_pain') {
+            const value = parseFloat(field.value);
+            if (value && (value < 0 || value > 10)) {
+                showError(field, errorId, 'Please enter valid pain scale (0-10)');
+            }
         }
     }
 }
@@ -166,14 +206,18 @@ function clearFieldError(event) {
 function showError(field, errorId, message) {
     field.classList.add('error');
     const errorElement = document.getElementById(errorId);
-    errorElement.textContent = message;
-    errorElement.style.display = 'block';
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
 }
 
 function clearError(field, errorId) {
     field.classList.remove('error');
     const errorElement = document.getElementById(errorId);
-    errorElement.style.display = 'none';
+    if (errorElement) {
+        errorElement.style.display = 'none';
+    }
 }
 
 function clearForm() {
@@ -203,23 +247,17 @@ async function registerPatient(patientData) {
     
     try {
         // Show loading state
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
         submitBtn.disabled = true;
         
-        // Simulate API call - replace with actual backend integration
-        await simulateAPICall(patientData);
+        // Send to backend for registration and ML prediction
+        await sendToBackend(patientData);
         
         // Show success message
         document.getElementById('successMessage').style.display = 'flex';
         
-        // Reset form after successful registration
-        setTimeout(() => {
-            document.getElementById('patientForm').reset();
-            document.getElementById('successMessage').style.display = 'none';
-        }, 3000);
-        
     } catch (error) {
-        alert('Error registering patient. Please try again.');
+        alert('Error processing patient data: ' + error.message);
         console.error('Registration error:', error);
     } finally {
         // Reset button state 
@@ -228,11 +266,49 @@ async function registerPatient(patientData) {
     }
 }
 
-function simulateAPICall(data) {
-    return new Promise((resolve, reject) => {
+async function sendToBackend(patientData) {
+    try {
+        // First register the patient
+        const registerResponse = await fetch('http://localhost:3000/api/patients/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(patientData)
+        });
+        
+        if (!registerResponse.ok) {
+            throw new Error(`Registration failed: ${registerResponse.status}`);
+        }
+        
+        // Then send to ML model for classification
+        const classifyResponse = await fetch('http://localhost:3000/api/classify', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(patientData)
+        });
+        
+        if (!classifyResponse.ok) {
+            throw new Error(`Classification failed: ${classifyResponse.status}`);
+        }
+        
+        const result = await classifyResponse.json();
+        console.log('Triage result:', result);
+        
+        // Store result for display
+        sessionStorage.setItem('triageResult', JSON.stringify(result));
+        sessionStorage.setItem('patientData', JSON.stringify(patientData));
+        
+        // Redirect to results page
         setTimeout(() => {
-            // Simulate random success/failure for demo
-            Math.random() > 0.1 ? resolve(data) : reject(new Error('Network error'));
+            window.location.href = 'show-result.html';
         }, 1500);
-    });
+        
+        return result;
+    } catch (error) {
+        console.error('Backend communication error:', error);
+        throw error;
+    }
 }

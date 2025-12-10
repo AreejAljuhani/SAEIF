@@ -1,0 +1,22 @@
+{
+  "name": "saeif-backend",
+  "version": "1.0.0",
+  "description": "SAEIF Emergency Triage Backend",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [
+    "emergency",
+    "triage",
+    "ctas"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}

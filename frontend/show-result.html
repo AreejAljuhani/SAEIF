@@ -32,7 +32,7 @@
           <span class="nav-text">Home</span>
         </a>
 
-        <a href="show-result.html" class="nav-item active">
+        <a href="patient-registration.html" class="nav-item active">
           <i class="fas fa-folder-open nav-icon"></i>
           <span class="nav-text">Emergency Triage</span>
         </a>
@@ -70,13 +70,35 @@
 
         <!-- Page Title -->
         <h1 class="title">Classification completed successfully</h1>
-        <p class="subtitle">Patient: <span class="patient-name">Khalid</span></p>
+        <p class="subtitle">Patient: <span class="patient-name" id="patientName">Loading...</span></p>
+
+        <!-- Patient Info Summary -->
+        <div class="patient-info-summary" id="patientInfo" style="display: none;">
+          <div class="info-row">
+            <span class="label">Age:</span>
+            <span class="value" id="displayAge">--</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Gender:</span>
+            <span class="value" id="displayGender">--</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Arrival Mode:</span>
+            <span class="value" id="displayArrivalMode">--</span>
+          </div>
+        </div>
 
         <!-- CTAS Result Card -->
-        <div class="ctas-card ctas-1">
+        <div class="ctas-card" id="ctasCard">
           <div class="ctas-label">CTAS Level</div>
-          <div class="ctas-number">1</div>
-          <div class="ctas-desc">Critical - Immediate resuscitation</div>
+          <div class="ctas-number" id="ctasLevel">--</div>
+          <div class="ctas-desc" id="ctasDescription">Loading prediction...</div>
+        </div>
+
+        <!-- Confidence Score -->
+        <div class="confidence-box" id="confidenceBox" style="display: none;">
+          <div class="confidence-label">Model Confidence</div>
+          <div class="confidence-value" id="confidenceValue">--</div>
         </div>
 
         <!-- Expected waiting time -->
@@ -85,12 +107,12 @@
             <i class="fa-regular fa-clock"></i>
             <span>Expected waiting time</span>
           </div>
-          <div class="waiting-right">immediate</div>
+          <div class="waiting-right" id="waitingTime">Loading...</div>
         </div>
 
         <!-- Action Buttons -->
         <div class="actions">
-          <button class="btn primary">Confirm Result</button>
+          <button class="btn primary" id="confirmBtn">Confirm Result</button>
           <a href="patient-reclassification.html" class="btn secondary">Override Result</a>
         </div>
       </section>
