@@ -268,20 +268,6 @@ async function registerPatient(patientData) {
 
 async function sendToBackend(patientData) {
     try {
-        // First register the patient
-        const registerResponse = await fetch('http://localhost:3000/api/patients/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(patientData)
-        });
-        
-        if (!registerResponse.ok) {
-            throw new Error(`Registration failed: ${registerResponse.status}`);
-        }
-        
-        // Then send to ML model for classification
         const classifyResponse = await fetch('http://localhost:3000/api/classify', {
             method: 'POST',
             headers: {
@@ -289,26 +275,71 @@ async function sendToBackend(patientData) {
             },
             body: JSON.stringify(patientData)
         });
-        
+
         if (!classifyResponse.ok) {
             throw new Error(`Classification failed: ${classifyResponse.status}`);
         }
-        
+
         const result = await classifyResponse.json();
-        console.log('Triage result:', result);
-        
-        // Store result for display
-        sessionStorage.setItem('triageResult', JSON.stringify(result));
+        console.log("Triage result from model:", result);
+
+        const rawCTAS =
+            result.aiCTAS ??
+            result.ctas ??
+            (typeof result.prediction === 'number'
+                ? result.prediction
+                : result.prediction?.prediction);
+
+        const aiCTAS = Number(rawCTAS);
+        console.log("Parsed aiCTAS:", aiCTAS);
+
+        if (!Number.isFinite(aiCTAS) || aiCTAS < 1 || aiCTAS > 5) {
+            console.error("Raw backend result:", result);
+            throw new Error("Invalid CTAS value from backend");
+        }
+
+        const now = new Date();
+
+        const age = patientData.personalInfo.age
+            ? parseInt(patientData.personalInfo.age, 10)
+            : calculateAgeFromDOB(patientData.personalInfo.dateOfBirth);
+
+        const docData = {
+            name: patientData.personalInfo.name,
+            sex: patientData.personalInfo.sex,
+            age: age,
+            dateOfBirth: patientData.personalInfo.dateOfBirth,
+            arrivalInfo: patientData.arrivalInfo,
+            clinicalAssessment: patientData.clinicalAssessment,
+            vitalSigns: patientData.vitalSigns,
+            chiefComplaint: patientData.chiefComplaint,
+            aiCTAS: aiCTAS,
+            finalCTAS: aiCTAS,
+            overrideReason: null,
+            status: 'waiting',
+            createdAt: now.toISOString(),
+            updatedAt: now.toISOString()
+        };
+
+        const docRef = await db.collection('patients').add(docData);
+        console.log("Patient saved in Firestore with ID:", docRef.id);
+
+        sessionStorage.setItem('triageResult', JSON.stringify({
+            ...result,
+            aiCTAS,
+            patientId: docRef.id
+        }));
         sessionStorage.setItem('patientData', JSON.stringify(patientData));
-        
-        // Redirect to results page
+        sessionStorage.setItem('patientId', docRef.id);
+
         setTimeout(() => {
             window.location.href = 'show-result.html';
         }, 1500);
-        
+
         return result;
     } catch (error) {
-        console.error('Backend communication error:', error);
+        console.error("Backend communication error:", error);
         throw error;
     }
 }
+

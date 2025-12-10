@@ -126,7 +126,24 @@
   </div>
 
   <!-- JavaScript -->
-  <script src="js/patient-reclassification.js"></script>
-</body>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
+    <script>
+      const firebaseConfig = {
+       apiKey: "AIzaSyDeoQPiTnqRcYktVQ8KZfkfwRrpe7RM5QE",
+       authDomain: "saeif-9eceb.firebaseapp.com",
+      projectId: "saeif-9eceb",
+      storageBucket: "saeif-9eceb.firebasestorage.app",
+      messagingSenderId: "432650335208",
+      appId: "1:432650335208:web:81a04042e6ed74be8d2a5d",
+      measurementId: "G-4223D38RGJ"
+      };
+
+      // init app + firestore
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
+<script src="js/patient-reclassification.js"></script>
+</body>
 </html>

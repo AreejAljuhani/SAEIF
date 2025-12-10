@@ -42,13 +42,34 @@
 
 /* ===== CTAS Card ===== */
 .ctas-card {
-  background: #cf0c0c;
   color: #fff;
   padding: 2.2rem 1.5rem;
   border-radius: 14px;
   margin: 0 auto 1.75rem;
   width: 85%;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+/* CTAS Color  */
+.ctas-card.ctas-1 {
+  background: #ff3b30;   
+}
+
+.ctas-card.ctas-2 {
+  background: #ff9f0a;   
+}
+
+.ctas-card.ctas-3 {
+  background: #ffd60a;   
+  color: #111827;       
+}
+
+.ctas-card.ctas-4 {
+  background: #34c759;   
+}
+
+.ctas-card.ctas-5 {
+  background: #5856d6;   
 }
 
 .ctas-label {
@@ -211,4 +232,4 @@
   .btn {
     width: 100%;
   }
-}
+} 
