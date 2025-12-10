@@ -79,28 +79,112 @@
                 <section class="form-section">
                     <h2 class="section-title">
                         <i class="fas fa-user"></i>
-                        Personal information
+                        Personal Information
                     </h2>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="userName" class="form-label required-field">User Name</label>
-                            <input type="text" id="userName" name="userName" class="form-input"
+                            <label for="name" class="form-label required-field">Name</label>
+                            <input type="text" id="name" name="name" class="form-input"
                                 placeholder="Enter patient name" required>
-                            <div class="error-message" id="userNameError">Please enter patient name</div>
+                            <div class="error-message" id="nameError">Please enter patient name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sex" class="form-label required-field">Gender</label>
+                            <select id="sex" name="sex" class="form-select" required>
+                                <option value="">Select gender</option>
+                                <option value="1">Female</option>
+                                <option value="2">Male</option>
+                            </select>
+                            <div class="error-message" id="sexError">Please select gender</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="age" class="form-label required-field">Age (Years)</label>
+                            <input type="number" id="age" name="age" class="form-input"
+                                placeholder="Enter patient age" min="0" max="150" required>
+                            <div class="error-message" id="ageError">Please enter valid age</div>
                         </div>
                         <div class="form-group">
                             <label for="dateOfBirth" class="form-label required-field">Date of Birth</label>
                             <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-input" required>
                             <div class="error-message" id="dateOfBirthError">Please select date of birth</div>
                         </div>
+                    </div>
+                </section>
+
+                <!-- Arrival Information Section -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-door-open"></i>
+                        Arrival Information
+                    </h2>
+                    <div class="form-grid">
                         <div class="form-group">
-                            <label for="gender" class="form-label required-field">Gender</label>
-                            <select id="gender" name="gender" class="form-select" required>
-                                <option value="">Select gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
+                            <label for="group" class="form-label required-field">ED Group</label>
+                            <select id="group" name="group" class="form-select" required>
+                                <option value="">Select ED group</option>
+                                <option value="1">Local ED</option>
+                                <option value="2">Regional ED</option>
                             </select>
-                            <div class="error-message" id="genderError">Please select gender</div>
+                            <div class="error-message" id="groupError">Please select ED group</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="arrival_mode" class="form-label required-field">Arrival Mode</label>
+                            <select id="arrival_mode" name="arrival_mode" class="form-select" required>
+                                <option value="">Select arrival mode</option>
+                                <option value="1">Walking</option>
+                                <option value="2">119 use</option>
+                                <option value="3">Private car</option>
+                                <option value="4">Private ambulance</option>
+                                <option value="5">Public transportation (Police etc)</option>
+                                <option value="6">Wheelchair</option>
+                                <option value="7">Others</option>
+                            </select>
+                            <div class="error-message" id="arrival_modeError">Please select arrival mode</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Clinical Assessment Section -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-stethoscope"></i>
+                        Clinical Assessment
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="injury" class="form-label required-field">Injury Status</label>
+                            <select id="injury" name="injury" class="form-select" required>
+                                <option value="">Select injury status</option>
+                                <option value="1">Non-injury</option>
+                                <option value="2">Injury</option>
+                            </select>
+                            <div class="error-message" id="injuryError">Please select injury status</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="mental" class="form-label required-field">Mental Status</label>
+                            <select id="mental" name="mental" class="form-select" required>
+                                <option value="">Select mental status</option>
+                                <option value="1">Alert</option>
+                                <option value="2">Verbal response</option>
+                                <option value="3">Pain response</option>
+                                <option value="4">Unconsciousness</option>
+                            </select>
+                            <div class="error-message" id="mentalError">Please select mental status</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pain" class="form-label required-field">Pain Status</label>
+                            <select id="pain" name="pain" class="form-select" required>
+                                <option value="">Select pain status</option>
+                                <option value="1">Pain</option>
+                                <option value="2">Non-pain</option>
+                            </select>
+                            <div class="error-message" id="painError">Please select pain status</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nrs_pain" class="form-label required-field">NRS Pain Scale</label>
+                            <input type="number" id="nrs_pain" name="nrs_pain" class="form-input"
+                                placeholder="0-10" min="0" max="10" required>
+                            <div class="error-message" id="nrs_painError">Please enter pain scale (0-10)</div>
                         </div>
                     </div>
                 </section>
@@ -109,32 +193,44 @@
                 <section class="form-section">
                     <h2 class="section-title">
                         <i class="fas fa-heartbeat"></i>
-                        Vital signs
+                        Vital Signs
                     </h2>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="heartRate" class="form-label required-field">Heart rate</label>
-                            <input type="number" id="heartRate" name="heartRate" class="form-input" placeholder="bpm"
-                                required>
-                            <div class="error-message" id="heartRateError">Please enter heart rate</div>
+                            <label for="saturation" class="form-label required-field">Saturation (O2)</label>
+                            <input type="number" id="saturation" name="saturation" class="form-input"
+                                placeholder="%" min="0" max="100" step="0.1" required>
+                            <div class="error-message" id="saturationError">Please enter oxygen saturation</div>
                         </div>
                         <div class="form-group">
-                            <label for="bloodPressure" class="form-label required-field">Blood Pressure</label>
-                            <input type="text" id="bloodPressure" name="bloodPressure" class="form-input"
-                                placeholder="e.g., 120/80" required>
-                            <div class="error-message" id="bloodPressureError">Please enter blood pressure</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="oxygenSaturation" class="form-label required-field">Oxygen Saturation</label>
-                            <input type="number" id="oxygenSaturation" name="oxygenSaturation" class="form-input"
-                                placeholder="%" min="0" max="100" required>
-                            <div class="error-message" id="oxygenSaturationError">Please enter oxygen saturation</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="temperature" class="form-label required-field">Temperature</label>
-                            <input type="number" id="temperature" name="temperature" class="form-input" placeholder="°C"
+                            <label for="bt" class="form-label required-field">Body Temperature (°C)</label>
+                            <input type="number" id="bt" name="bt" class="form-input" placeholder="°C"
                                 step="0.1" required>
-                            <div class="error-message" id="temperatureError">Please enter temperature</div>
+                            <div class="error-message" id="btError">Please enter body temperature</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="rr" class="form-label required-field">Respiration Rate</label>
+                            <input type="number" id="rr" name="rr" class="form-input"
+                                placeholder="breaths/min" min="0" required>
+                            <div class="error-message" id="rrError">Please enter respiration rate</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hr" class="form-label required-field">Heart Rate</label>
+                            <input type="number" id="hr" name="hr" class="form-input" placeholder="bpm"
+                                min="0" required>
+                            <div class="error-message" id="hrError">Please enter heart rate</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dbp" class="form-label required-field">Diastolic Blood Pressure</label>
+                            <input type="number" id="dbp" name="dbp" class="form-input" placeholder="mmHg"
+                                min="0" required>
+                            <div class="error-message" id="dbpError">Please enter diastolic BP</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sbp" class="form-label required-field">Systolic Blood Pressure</label>
+                            <input type="number" id="sbp" name="sbp" class="form-input" placeholder="mmHg"
+                                min="0" required>
+                            <div class="error-message" id="sbpError">Please enter systolic BP</div>
                         </div>
                     </div>
                 </section>
@@ -143,13 +239,14 @@
                 <section class="form-section">
                     <h2 class="section-title">
                         <i class="fas fa-file-medical"></i>
-                        Main symptoms and complaints
+                        Chief Complaint
                     </h2>
                     <div class="form-group">
-                        <textarea id="symptoms" name="symptoms" class="form-textarea"
-                            placeholder="Describe patient's symptoms, complaints, and medical history..." rows="4"
+                        <label for="chief_complain" class="form-label required-field">Chief Complaint</label>
+                        <textarea id="chief_complain" name="chief_complain" class="form-textarea"
+                            placeholder="Describe patient's chief complaint and symptoms..." rows="4"
                             required></textarea>
-                        <div class="error-message" id="symptomsError">Please describe patient symptoms</div>
+                        <div class="error-message" id="chief_complainError">Please describe patient's chief complaint</div>
                     </div>
                 </section>
 

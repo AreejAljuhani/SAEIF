@@ -42,7 +42,7 @@ body {
     width: 260px;
     background: var(--sidebar-bg);
     color: var(--sidebar-text);
-    padding: 2rem 0;
+    padding: 2.5rem 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -51,12 +51,12 @@ body {
 
 .logo {
   border-bottom: 1px solid #2d3748;
-  margin-bottom: 1.5rem;
-  padding: 0.25rem 0 1rem 0; /* فراغ أقل من فوق */
+  margin-bottom: 1rem;
+  padding: 0.25rem 0 0.5rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 120px
+  height: 80px;
 }
 
 .logo-img {
@@ -68,8 +68,9 @@ body {
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   padding: 0 1rem;
+  gap: 1.5rem;
   flex: 1;
 }
 
@@ -77,7 +78,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  padding: 1rem 1rem;
   text-decoration: none;
   color: var(--sidebar-text);
   border-radius: 6px;
@@ -127,6 +128,8 @@ body {
 .main-content {
   flex: 1;
   padding: 2rem;
+  overflow-y: auto;
+  overflow-x: visible;
 }
 
 /* panel أساسي (تقدرين تستخدمينه في كل الصفحات) */
