@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saeif - Show Result</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/show-result.css" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="container">
+    
+    <!-- Main Navigation Sidebar -->
+    <aside class="sidebar">
+      <!-- Logo -->
+      <div class="logo">
+        <img src="assets/saeif-logo1.png" alt="Saeif Logo" class="logo-img">
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="home.html" class="nav-item">
+          <i class="fas fa-home nav-icon"></i>
+          <span class="nav-text">Home</span>
+        </a>
+
+        <a href="show-result.html" class="nav-item active">
+          <i class="fas fa-folder-open nav-icon"></i>
+          <span class="nav-text">Emergency Triage</span>
+        </a>
+
+        <a href="patient-list.html" class="nav-item">
+          <i class="fas fa-file-alt nav-icon"></i>
+          <span class="nav-text">ED Patient Board</span>
+        </a>
+
+        <a href="iot-monitoring.html" class="nav-item">
+          <i class="fas fa-heartbeat nav-icon"></i>
+          <span class="nav-text">Vital Signs Monitoring</span>
+        </a>
+
+        <a href="alerts.html" class="nav-item">
+          <i class="fas fa-bell nav-icon"></i>
+          <span class="nav-text">Clinical Alerts</span>
+        </a>
+      </nav>
+
+      <!-- Map Icon -->
+      <div class="sidebar-footer">
+        <img src="assets/map-icon.png" alt="World map" class="sidebar-map">
+      </div>
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <section class="panel show-result-panel">
+       <!-- Success Icon -->
+        <div class="success-icon">
+          <i class="fa-solid fa-check"></i>
+        </div>
+
+        <!-- Page Title -->
+        <h1 class="title">Classification completed successfully</h1>
+        <p class="subtitle">Patient: <span class="patient-name">Khalid</span></p>
+
+        <!-- CTAS Result Card -->
+        <div class="ctas-card ctas-1">
+          <div class="ctas-label">CTAS Level</div>
+          <div class="ctas-number">1</div>
+          <div class="ctas-desc">Critical - Immediate resuscitation</div>
+        </div>
+
+        <!-- Expected waiting time -->
+        <div class="waiting-box">
+          <div class="waiting-left">
+            <i class="fa-regular fa-clock"></i>
+            <span>Expected waiting time</span>
+          </div>
+          <div class="waiting-right">immediate</div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions">
+          <button class="btn primary">Confirm Result</button>
+          <a href="patient-reclassification.html" class="btn secondary">Override Result</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="js/show-result.js"></script>
+</body>
+
+</html>

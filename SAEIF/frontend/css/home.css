@@ -1,0 +1,230 @@
+/* =========================
+   HOME PAGE STYLES ONLY
+   ========================= */
+
+/* Patient Stats Section */
+.patient-stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent;
+}
+
+.stat-card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.stat-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.8;
+}
+
+.stat-number {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.stat-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.stat-action i {
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+}
+
+.stat-action:hover i {
+    transform: translateX(2px);
+}
+
+/* Cards colors */
+.patient-count {
+    border-left-color: #3182ce;
+    color: #3182ce;
+}
+
+.observation {
+    border-left-color: #805ad5;
+    color: #805ad5;
+}
+
+.alerts {
+    border-left-color: #e53e3e;
+    color: #e53e3e;
+}
+
+/* Emergency Overview */
+.emergency-overview {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.section-title {
+    color: var(--text-dark);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.emergency-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.emergency-stat-card {
+    padding: 1.25rem 0.75rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.emergency-stat-card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.stat-content {
+    width: 100%;
+    text-align: center;
+}
+
+.emergency-stat-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+    color: var(--text-light);
+    line-height: 1.2;
+}
+
+.emergency-stat-number {
+    font-size: 1.4rem;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+}
+
+.emergency-stat-number span {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--text-light);
+}
+
+/* CTAS colors */
+.critical {
+    border-top: 3px solid #e53e3e;
+    background: linear-gradient(135deg, #fff5f5, #fed7d7);
+}
+
+.emergency {
+    border-top: 3px solid #dd6b20;
+    background: linear-gradient(135deg, #fffaf0, #feebc8);
+}
+
+.urgent {
+    border-top: 3px solid #d69e2e;
+    background: linear-gradient(135deg, #fffff0, #fefcbf);
+}
+
+.less-urgent {
+    border-top: 3px solid #38a169;
+    background: linear-gradient(135deg, #f0fff4, #c6f6d5);
+}
+
+.non-urgent {
+    border-top: 3px solid #3182ce;
+    background: linear-gradient(135deg, #ebf8ff, #bee3f8);
+}
+
+.waiting-time {
+    border-top: 3px solid #718096;
+    background: linear-gradient(135deg, #f7fafc, #edf2f7);
+}
+
+.critical .emergency-stat-number {
+    color: #e53e3e;
+}
+
+.emergency .emergency-stat-number {
+    color: #dd6b20;
+}
+
+.urgent .emergency-stat-number {
+    color: #d69e2e;
+}
+
+.less-urgent .emergency-stat-number {
+    color: #38a169;
+}
+
+.non-urgent .emergency-stat-number {
+    color: #3182ce;
+}
+
+.waiting-time .emergency-stat-number {
+    color: #718096;
+}
+
+/* Responsive home only */
+@media (max-width: 900px) {
+    .emergency-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .patient-stats-section {
+        grid-template-columns: 1fr;
+    }
+
+    .emergency-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .emergency-stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

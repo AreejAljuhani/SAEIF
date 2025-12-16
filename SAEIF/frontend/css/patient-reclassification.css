@@ -103,19 +103,11 @@
   margin-right: 0.2rem;
 }
 
-.ctas-pill { 
-  color:#fff; 
-  border-radius:6px;
-  padding:0.25rem 0.65rem;
-  font-weight:700;
+.current-label {
+  font-size: 0.8rem;
+  margin-left: 0.25rem;
+  color: var(--text-light);
 }
-
-/* CTAS pill colors */
-.ctas-pill.level-1 { background:#FF3B30; }
-.ctas-pill.level-2 { background:#FF9F0A; }
-.ctas-pill.level-3 { background:#FFD60A; color:#111; } 
-.ctas-pill.level-4 { background:#34C759; }
-.ctas-pill.level-5 { background:#5856D6; }
 
 .chief-complaint {
   margin-top: 1rem;
