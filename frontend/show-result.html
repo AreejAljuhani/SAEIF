@@ -112,15 +112,25 @@
 
         <!-- Action Buttons -->
         <div class="actions">
-          <button class="btn primary" id="confirmBtn">Confirm Result</button>
+          <button class="btn primary" id="confirmBtn" style="display: block !important;">Confirm Result</button>
           <a href="patient-reclassification.html" class="btn secondary">Override Result</a>
+          <!-- IoT Monitoring Button - Created dynamically by JavaScript -->
         </div>
       </section>
     </main>
   </div>
 
   <!-- JavaScript -->
-  <script src="js/show-result.js"></script>
+   <!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+
+<!-- config FIRST -->
+<script src="js/firebase-config.js"></script>
+
+<!-- your logic AFTER firebase -->
+<script src="js/show-result.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saeif - Vital Signs Monitoring</title>
+
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="css/home.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+.monitor-grid{
+display:grid;
+grid-template-columns: repeat(auto-fill,minmax(320px,1fr));
+gap:20px;
+margin-top:20px;
+}
+
+.monitor-card{
+background:white;
+border-radius:14px;
+padding:18px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.monitor-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
+.device-badge{
+background:#eef4ff;
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+}
+
+.vitals{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+margin-top:10px;
+gap:10px;
+}
+
+.vital-box{
+background:#f7f9fc;
+padding:10px;
+border-radius:10px;
+text-align:center;
+}
+
+.vital-value{
+font-size:20px;
+font-weight:600;
+}
+
+.alert-box{
+margin-top:10px;
+color:#d32f2f;
+font-weight:500;
+}
+
+.status-live{
+color:green;
+font-weight:600;
+}
+
+.status-off{
+color:red;
+font-weight:600;
+}
+
+.disconnect-btn{
+width:100%;
+margin-top:12px;
+padding:8px 12px;
+background:#d32f2f;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:500;
+transition:background 0.3s;
+}
+
+.disconnect-btn:hover{
+background:#b71c1c;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+<div class="logo">
+<img src="assets/saeif-logo1.png" class="logo-img">
+</div>
+
+<nav class="sidebar-nav">
+
+<a href="home.html" class="nav-item">
+<i class="fas fa-home nav-icon"></i>
+<span class="nav-text">Home</span>
+</a>
+
+<a href="patient-registration.html" class="nav-item">
+<i class="fas fa-folder-open nav-icon"></i>
+<span class="nav-text">Emergency Triage</span>
+</a>
+
+<a href="patient-list.html" class="nav-item">
+<i class="fas fa-file-alt nav-icon"></i>
+<span class="nav-text">ED Patient Board</span>
+</a>
+
+<a href="iot-monitoring.html" class="nav-item active">
+<i class="fas fa-heartbeat nav-icon"></i>
+<span class="nav-text">Vital Signs Monitoring</span>
+</a>
+
+<a href="alerts.html" class="nav-item">
+<i class="fas fa-bell nav-icon"></i>
+<span class="nav-text">Clinical Alerts</span>
+</a>
+
+</nav>
+
+<div class="sidebar-footer">
+<img src="assets/map-icon.png" class="sidebar-map">
+</div>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="main-content">
+
+<section class="emergency-overview">
+<h2 class="section-title">IoT Vital Signs Monitoring</h2>
+
+<div id="monitorGrid" class="monitor-grid"></div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/iot-monitoring.js"></script>
+
+</body>
+</html>
