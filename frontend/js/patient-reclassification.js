@@ -1,14 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
   const levelButtons = document.querySelectorAll(".ctas-box");
-  const confirmBtn   = document.querySelector(".btn.primary");
+  const confirmBtn = document.querySelector(".btn.primary");
 
-  const patientData  = JSON.parse(sessionStorage.getItem("patientData") || "{}");
+  const patientData = JSON.parse(sessionStorage.getItem("patientData") || "{}");
   const triageResult = JSON.parse(sessionStorage.getItem("triageResult") || "{}");
-  const patientId    = sessionStorage.getItem("patientId");
+  const patientId = sessionStorage.getItem("patientId");
 
-  const nameEl        = document.querySelector(".patient-name");
-  const metaEls       = document.querySelectorAll(".meta");
-  const chiefEl       = document.querySelector(".chief-text");
+  const nameEl = document.querySelector(".patient-name");
+  const metaEls = document.querySelectorAll(".meta");
+  const chiefEl = document.querySelector(".chief-text");
   const currentCtasEl = document.querySelector(".ctas-pill");
 
   if (nameEl) {
@@ -38,6 +38,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (currentCtasEl && currentLevel) {
     currentCtasEl.textContent = `CTAS - ${currentLevel}`;
+
+    const pillClasses = ["level-1", "level-2", "level-3", "level-4", "level-5"];
+
+    function setCtasPill(level) {
+      if (!currentCtasEl) return;
+
+
+      pillClasses.forEach(c => currentCtasEl.classList.remove(c));
+
+
+      currentCtasEl.classList.add(`level-${level}`);
+    }
+
+    if (currentCtasEl && currentLevel) {
+      const lvl = Number(currentLevel);
+      currentCtasEl.textContent = `CTAS - ${lvl}`;
+      setCtasPill(lvl);
+    }
   }
 
   const levelColors = {
@@ -81,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const chosenLevel = chosen ? Number(chosen.dataset.level) : null;
       const textareas = document.querySelectorAll("textarea");
       const reason = textareas[0] ? textareas[0].value : "";
-      const notes  = textareas[1] ? textareas[1].value : "";
+      const notes = textareas[1] ? textareas[1].value : "";
 
       if (!chosenLevel) {
         alert("Please select a CTAS level first.");
