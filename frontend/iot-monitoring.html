@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,158 +7,167 @@
 
 <link rel="stylesheet" href="css/global.css">
 <link rel="stylesheet" href="css/home.css">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
-
-.monitor-grid{
-display:grid;
-grid-template-columns: repeat(auto-fill,minmax(320px,1fr));
-gap:20px;
-margin-top:20px;
-}
-
-.monitor-card{
-background:white;
-border-radius:14px;
-padding:18px;
-box-shadow:0 2px 8px rgba(0,0,0,0.05);
-}
-
-.monitor-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:10px;
-}
-
-.device-badge{
-background:#eef4ff;
-padding:4px 10px;
-border-radius:20px;
-font-size:12px;
-}
-
-.vitals{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-margin-top:10px;
-gap:10px;
-}
-
-.vital-box{
-background:#f7f9fc;
-padding:10px;
-border-radius:10px;
-text-align:center;
-}
-
-.vital-value{
-font-size:20px;
-font-weight:600;
-}
-
-.alert-box{
-margin-top:10px;
-color:#d32f2f;
-font-weight:500;
-}
-
-.status-live{
-color:green;
-font-weight:600;
-}
-
-.status-off{
-color:red;
-font-weight:600;
-}
-
-.disconnect-btn{
-width:100%;
-margin-top:12px;
-padding:8px 12px;
-background:#d32f2f;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:500;
-transition:background 0.3s;
-}
-
-.disconnect-btn:hover{
-background:#b71c1c;
-}
-
-</style>
-
+<link rel="stylesheet" href="css/iot-monitoring.css">
 </head>
 
 <body>
 
 <div class="container">
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-<div class="logo">
-<img src="assets/saeif-logo1.png" class="logo-img">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="assets/saeif-logo1.png" class="logo-img">
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="home.html" class="nav-item"><i class="fas fa-home nav-icon"></i><span class="nav-text">Home</span></a>
+      <a href="patient-registration.html" class="nav-item"><i class="fas fa-folder-open nav-icon"></i><span class="nav-text">Emergency Triage</span></a>
+      <a href="patient-list.html" class="nav-item"><i class="fas fa-file-alt nav-icon"></i><span class="nav-text">ED Patient Board</span></a>
+      <a href="iot-monitoring.html" class="nav-item active"><i class="fas fa-heartbeat nav-icon"></i><span class="nav-text">Vital Signs Monitoring</span></a>
+      <a href="alerts.html" class="nav-item"><i class="fas fa-bell nav-icon"></i><span class="nav-text">Clinical Alerts</span></a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <img src="assets/map-icon.png" class="sidebar-map">
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <section class="emergency-overview">
+
+      <div class="monitor-page-header">
+        <h2 class="section-title">IoT Vital Signs Monitoring</h2>
+      </div>
+
+      <div id="monitorGrid" class="monitor-grid"></div>
+
+      <div id="emptyState" class="empty-state" style="display:none;">
+        <i class="fas fa-heartbeat"></i>
+        <p>No patients currently under IoT monitoring</p>
+      </div>
+
+    </section>
+
+  </main>
 </div>
 
-<nav class="sidebar-nav">
+<!-- ══ PATIENT DETAILS MODAL ══ -->
+<div class="modal-overlay" id="detailsModal">
 
-<a href="home.html" class="nav-item">
-<i class="fas fa-home nav-icon"></i>
-<span class="nav-text">Home</span>
-</a>
+  <div class="modal-box">
 
-<a href="patient-registration.html" class="nav-item">
-<i class="fas fa-folder-open nav-icon"></i>
-<span class="nav-text">Emergency Triage</span>
-</a>
+    <div class="modal-header">
+      <div class="modal-title">
+        <i class="fas fa-user-circle"></i> Patient Details
+      </div>
 
-<a href="patient-list.html" class="nav-item">
-<i class="fas fa-file-alt nav-icon"></i>
-<span class="nav-text">ED Patient Board</span>
-</a>
+      <button class="modal-close" onclick="closeDetailsModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
 
-<a href="iot-monitoring.html" class="nav-item active">
-<i class="fas fa-heartbeat nav-icon"></i>
-<span class="nav-text">Vital Signs Monitoring</span>
-</a>
+    <!-- Patient info -->
+    <div class="modal-patient-card">
+      <div class="modal-patient-name" id="modal-name">--</div>
 
-<a href="alerts.html" class="nav-item">
-<i class="fas fa-bell nav-icon"></i>
-<span class="nav-text">Clinical Alerts</span>
-</a>
+      <div class="modal-patient-details">
+        <span><i class="fas fa-birthday-cake"></i> Age: <strong id="modal-age">--</strong></span>
+        <span><i class="fas fa-venus-mars"></i> <strong id="modal-gender">--</strong></span>
+        <span><i class="fas fa-tag"></i> <strong id="modal-ctas">--</strong></span>
+        <span><i class="fas fa-watch"></i> Device: <strong id="modal-device">--</strong></span>
+      </div>
+    </div>
 
-</nav>
+    <!-- Vitals -->
+    <div class="modal-vitals-title">
+      <i class="fas fa-chart-line"></i> Live Vital Signs
+    </div>
 
-<div class="sidebar-footer">
-<img src="assets/map-icon.png" class="sidebar-map">
+    <div class="modal-vitals-grid">
+
+      <div class="modal-vital-item" id="modal-hr-box">
+        <div class="modal-vital-icon">❤️</div>
+        <div class="modal-vital-label">Heart Rate</div>
+        <div class="modal-vital-value" id="modal-hr">--</div>
+        <div class="modal-vital-note" id="modal-hr-note"></div>
+      </div>
+
+      <div class="modal-vital-item" id="modal-spo2-box">
+        <div class="modal-vital-icon">🫁</div>
+        <div class="modal-vital-label">SpO2</div>
+        <div class="modal-vital-value" id="modal-spo2">--</div>
+        <div class="modal-vital-note" id="modal-spo2-note"></div>
+      </div>
+
+      <div class="modal-vital-item" id="modal-temp-box">
+        <div class="modal-vital-icon">🌡️</div>
+        <div class="modal-vital-label">Temp</div>
+        <div class="modal-vital-value" id="modal-temp">--</div>
+        <div class="modal-vital-note" id="modal-temp-note"></div>
+      </div>
+
+    </div>
+
+    <!-- Alert box -->
+    <div class="modal-alert-box" id="modal-alert-box">
+      <div class="modal-alert-header">
+        <i class="fas fa-exclamation-triangle"></i> Active Alerts
+      </div>
+      <div id="modal-alert-list"></div>
+    </div>
+
+    <!-- Actions -->
+    <div class="modal-actions">
+      <button class="btn-cancel-modal" onclick="closeDetailsModal()">Close</button>
+      <button class="btn-stop-monitoring" onclick="openStopModal()">
+        <i class="fas fa-power-off"></i> Stop Monitoring
+      </button>
+    </div>
+
+  </div>
 </div>
 
-</aside>
+<!-- ══ STOP MONITORING MODAL ══ -->
+<div class="modal-overlay" id="stopModal">
 
+  <div class="stop-modal-box">
 
-<!-- MAIN -->
-<main class="main-content">
+    <div class="stop-warning-banner">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        Stop Monitoring?
+        <span>IoT device will be disconnected</span>
+      </div>
+    </div>
 
-<section class="emergency-overview">
-<h2 class="section-title">IoT Vital Signs Monitoring</h2>
+    <div class="stop-instruction">
+      <i class="fas fa-info-circle"></i>
+      Remove the device from the patient before confirming. Select a reason:
+    </div>
 
-<div id="monitorGrid" class="monitor-grid"></div>
+    <div class="reasons-title">Reason for stopping</div>
 
-</section>
+    <div class="reasons-grid">
+      <button class="reason-btn" data-reason="Patient admitted" onclick="selectReason(this)">Patient admitted</button>
+      <button class="reason-btn" data-reason="Device issue" onclick="selectReason(this)">Device issue</button>
+      <button class="reason-btn" data-reason="Patient discharged" onclick="selectReason(this)">Patient discharged</button>
+      <button class="reason-btn" data-reason="Patient request" onclick="selectReason(this)">Patient request</button>
+    </div>
 
-</main>
+    <div class="stop-actions">
+      <button class="btn-back" onclick="closeStopModal()">Cancel</button>
+      <button class="btn-confirm-stop" id="confirmStopBtn" onclick="confirmStop()" disabled>
+        Confirm Stop
+      </button>
+    </div>
 
+  </div>
 </div>
-
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
