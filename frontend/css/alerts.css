@@ -1,0 +1,222 @@
+/* =========================
+   CLINICAL ALERTS PAGE STYLES
+========================= */
+
+  .alerts-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .alerts-header .section-title { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+
+  .unresolved-badge {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    color: #94a3b8;
+    gap: 0.75rem;
+    text-align: center;
+  }
+  .empty-state i { font-size: 2.5rem; opacity: 0.4; }
+  .empty-state .empty-title { font-size: 0.95rem; font-weight: 600; }
+  .empty-state .empty-sub   { font-size: 0.82rem; }
+
+  /* ── Alert card ── */
+  .alert-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .alert-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border-left: 4px solid #dc2626;
+    animation: slide-in 0.25s ease;
+  }
+  .alert-card.resolved {
+    border-left-color: #16a34a;
+    opacity: 0.7;
+  }
+  @keyframes slide-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Top row */
+  .alert-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .alert-icon-wrap {
+    width: 40px; height: 40px;
+    background: #fff5f5;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: #dc2626;
+    font-size: 1.1rem;
+  }
+  .alert-card.resolved .alert-icon-wrap { background: #f0fdf4; color: #16a34a; }
+
+  .alert-card-info { flex: 1; }
+  .alert-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 2px;
+  }
+  .alert-card-sub {
+    font-size: 0.78rem;
+    color: #64748b;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+  }
+  .alert-card-sub span { display: flex; align-items: center; gap: 4px; }
+  .alert-card-time {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  /* Vitals row */
+  .alert-vitals {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .alert-vital-chip {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 12px;
+    text-align: center;
+    min-width: 70px;
+  }
+  .alert-vital-chip.abnormal { background: #fff5f5; border-color: #fecaca; }
+  .alert-vital-chip-label { font-size: 0.65rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
+  .alert-vital-chip-value { font-size: 0.95rem; font-weight: 700; color: #1e293b; }
+  .alert-vital-chip.abnormal .alert-vital-chip-value { color: #dc2626; }
+
+  /* Deterioration box */
+  .deterioration-box {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  .deterioration-box-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #92400e;
+    margin-bottom: 8px;
+  }
+  .deterioration-box-header i { color: #d97706; }
+  .deterioration-item {
+    font-size: 0.78rem;
+    color: #78350f;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 0;
+  }
+  .deterioration-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-red    { background: #dc2626; }
+  .dot-yellow { background: #d97706; }
+
+  /* Nurse decision */
+  .nurse-section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 8px;
+  }
+
+  .nurse-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .btn-keep-level {
+    padding: 9px 16px;
+    border-radius: 9px;
+    border: 1.5px solid #e2e8f0;
+    background: #fff;
+    color: #374151;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-keep-level:hover { background: #f8fafc; border-color: #cbd5e1; }
+
+  .btn-upgrade {
+    padding: 9px 16px;
+    border-radius: 9px;
+    border: none;
+    background: #dc2626;
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    transition: background 0.15s;
+  }
+  .btn-upgrade:hover { background: #b91c1c; }
+
+  .btn-acknowledge {
+    padding: 9px 16px;
+    border-radius: 9px;
+    border: 1.5px solid #3b82f6;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-acknowledge:hover { background: #dbeafe; }
+
+  .btn-continue {
+    padding: 9px 16px;
+    border-radius: 9px;
+    border: 1.5px solid #e2e8f0;
+    background: #fff;
+    color: #374151;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-continue:hover { background: #f8fafc; }
+
+  .resolved-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #f0fdf4; color: #16a34a;
+    padding: 5px 12px; border-radius: 8px;
+    font-size: 0.78rem; font-weight: 600;
+  }

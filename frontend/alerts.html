@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saeif - Clinical Alerts</title>
+
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/alerts.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="assets/saeif-logo1.png" class="logo-img">
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="home.html" class="nav-item"><i class="fas fa-home nav-icon"></i><span class="nav-text">Home</span></a>
+      <a href="patient-registration.html" class="nav-item"><i class="fas fa-folder-open nav-icon"></i><span class="nav-text">Emergency Triage</span></a>
+      <a href="patient-list.html" class="nav-item"><i class="fas fa-file-alt nav-icon"></i><span class="nav-text">ED Patient Board</span></a>
+      <a href="iot-monitoring.html" class="nav-item"><i class="fas fa-heartbeat nav-icon"></i><span class="nav-text">Vital Signs Monitoring</span></a>
+      <a href="alerts.html" class="nav-item active"><i class="fas fa-bell nav-icon"></i><span class="nav-text">Clinical Alerts</span></a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <img src="assets/map-icon.png" class="sidebar-map">
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <section class="emergency-overview">
+
+      <div class="alerts-header">
+        <h2 class="section-title">Clinical Alerts</h2>
+        <span class="unresolved-badge" id="unresolvedBadge" style="display:none;"></span>
+      </div>
+
+      <div id="alertsList" class="alert-cards-list"></div>
+
+      <div id="emptyAlerts" class="empty-state" style="display:none;">
+        <i class="fas fa-bell-slash"></i>
+        <div class="empty-title">No active alerts</div>
+        <div class="empty-sub">Deterioration alerts from IoT monitoring will appear here</div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/alerts.js"></script>
+
+</body>
+</html>
