@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Patient Registration page loaded');
+    try {
+        const scriptEl = document.querySelector('script[src*="patient-registration.js"]');
+        console.log('Page URL:', window.location.href);
+        if (scriptEl && scriptEl.src) console.log('Loaded script:', scriptEl.src);
+    } catch (_) {
+        // no-op
+    }
     
     // Initialize form
     initializeForm();
@@ -11,22 +18,48 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeForm() {
     // Set today's date as default for date inputs
     const today = new Date().toISOString().split('T')[0];
-    document.getElementById('dateOfBirth').max = today;
+    const dobField = document.getElementById('dateOfBirth');
+    if (dobField) {
+        dobField.max = today;
+    }
 }
 
 function setupEventListeners() {
     const form = document.getElementById('patientForm');
+    if (!form) return;
+
     form.addEventListener('submit', handleFormSubmit);
     
     // Add real-time validation
     const inputs = form.querySelectorAll('input, select, textarea');
     inputs.forEach(input => {
+        if (input && input.id === 'age') return;
         input.addEventListener('blur', validateField);
         input.addEventListener('input', clearFieldError);
     });
     
     // Clear button event listener
-    document.getElementById('clearButton').addEventListener('click', clearForm);
+    const clearButton = document.getElementById('clearButton');
+    if (clearButton) {
+        clearButton.addEventListener('click', clearForm);
+    }
+
+    // Listen for changes in Date of Birth field (and auto-fill Age)
+    const dobField = document.getElementById('dateOfBirth');
+    if (dobField) {
+        const scheduleDobValidation = () => {
+            // Some browsers update <input type="date"> value after the event fires.
+            window.setTimeout(validateDateOfBirth, 0);
+        };
+
+        dobField.addEventListener('change', scheduleDobValidation);
+        dobField.addEventListener('input', scheduleDobValidation);
+        dobField.addEventListener('blur', scheduleDobValidation);
+        dobField.addEventListener('focusout', scheduleDobValidation);
+        dobField.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') scheduleDobValidation();
+        });
+    }
 }
 
 function setupNavigation() {
@@ -76,6 +109,9 @@ function handleNavigation(page) {
 
 function handleFormSubmit(event) {
     event.preventDefault();
+
+    // Ensure age is computed even if the user submits immediately after typing DOB.
+    validateDateOfBirth();
     
     if (validateForm()) {
         const formData = getFormData();
@@ -115,12 +151,105 @@ function getFormData() {
     };
 }
 
+function toFiniteNumber(value) {
+    const num = Number(value);
+    return Number.isFinite(num) ? num : null;
+}
+
+function parseISODateToLocalDate(isoDate) {
+    // Expecting YYYY-MM-DD (from <input type="date">). Avoid timezone quirks of new Date('YYYY-MM-DD').
+    if (!isoDate || typeof isoDate !== 'string') return null;
+    const trimmed = isoDate.trim();
+    const match = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(trimmed);
+    if (!match) return null;
+
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+    if (!Number.isFinite(year) || !Number.isFinite(month) || !Number.isFinite(day)) return null;
+    if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+
+    const date = new Date(year, month - 1, day);
+    // Guard against invalid dates like 2026-02-31 which roll over.
+    if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return null;
+    date.setHours(0, 0, 0, 0);
+    return date;
+}
+
+function validateNumberRange(field, errorId, min, max, message) {
+    const value = toFiniteNumber(field.value);
+    if (value === null) {
+        showError(field, errorId, 'Please enter a valid number');
+        return false;
+    }
+    if (value < min || value > max) {
+        showError(field, errorId, message);
+        return false;
+    }
+    clearError(field, errorId);
+    return true;
+}
+
+function validateDateOfBirth() {
+    const dobField = document.getElementById('dateOfBirth');
+    if (!dobField) return true;
+
+    const raw = dobField.value;
+    const errorId = 'dateOfBirthError';
+
+    const ageField = document.getElementById('age');
+    if (ageField && ageField.disabled) {
+        ageField.disabled = false;
+    }
+
+    if (!raw || !raw.toString().trim()) {
+        if (ageField) ageField.value = '';
+        showError(dobField, errorId, 'This field is required');
+        return false;
+    }
+
+    const dob = parseISODateToLocalDate(raw);
+    if (!dob) {
+        if (ageField) ageField.value = '';
+        showError(dobField, errorId, 'Please enter a valid date');
+        return false;
+    }
+
+    // Block any future DOB (local date comparison).
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (dob > today) {
+        if (ageField) ageField.value = '';
+        showError(dobField, errorId, 'Date of birth cannot be in the future');
+        return false;
+    }
+
+    const age = calculateAgeFromDOB(raw);
+    if (ageField) {
+        ageField.value = String(age);
+        ageField.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    if (!Number.isFinite(age) || age < 0 || age > 150) {
+        const ageErrorId = 'ageError';
+        if (ageField) {
+            showError(ageField, ageErrorId, 'Please enter a valid age (0-150)');
+        }
+        showError(dobField, errorId, 'Please select a valid date of birth');
+        return false;
+    }
+
+    clearError(dobField, errorId);
+    if (ageField) clearError(ageField, 'ageError');
+    return true;
+}
+
 function validateForm() {
     let isValid = true;
     
     // Required fields validation
     const requiredFields = [
-        'name', 'sex', 'age', 'dateOfBirth',
+        'name','age','sex', 'dateOfBirth',
         'group', 'arrival_mode', 
         'injury', 'mental', 'pain', 'nrs_pain',
         'saturation', 'bt', 'rr', 'hr', 'dbp', 'sbp',
@@ -140,24 +269,69 @@ function validateForm() {
             }
         }
     });
+
+    // Date validation + auto-age
+    if (!validateDateOfBirth()) {
+        isValid = false;
+    }
     
     // Additional validation for specific fields
-    const hr = parseFloat(document.getElementById('hr').value);
-    if (hr && (hr < 30 || hr > 200)) {
-        showError(document.getElementById('hr'), 'hrError', 'Please enter a valid heart rate (30-200 bpm)');
-        isValid = false;
+    const hrField = document.getElementById('hr');
+    if (hrField && hrField.value.toString().trim()) {
+        if (!validateNumberRange(hrField, 'hrError', 25, 250, 'Please enter a valid heart rate (25-250 bpm)')) {
+            isValid = false;
+        }
     }
-    
-    const saturation = parseFloat(document.getElementById('saturation').value);
-    if (saturation && (saturation < 0 || saturation > 100)) {
-        showError(document.getElementById('saturation'), 'saturationError', 'Please enter valid saturation (0-100%)');
-        isValid = false;
+
+    const saturationField = document.getElementById('saturation');
+    if (saturationField && saturationField.value.toString().trim()) {
+        if (!validateNumberRange(saturationField, 'saturationError', 50, 100, 'Please enter valid saturation (50-100%)')) {
+            isValid = false;
+        }
     }
-    
-    const nrs_pain = parseFloat(document.getElementById('nrs_pain').value);
-    if (nrs_pain && (nrs_pain < 0 || nrs_pain > 10)) {
-        showError(document.getElementById('nrs_pain'), 'nrs_painError', 'Please enter valid pain scale (0-10)');
-        isValid = false;
+
+    const nrsPainField = document.getElementById('nrs_pain');
+    if (nrsPainField && nrsPainField.value.toString().trim()) {
+        if (!validateNumberRange(nrsPainField, 'nrs_painError', 0, 10, 'Please enter valid pain scale (0-10)')) {
+            isValid = false;
+        }
+    }
+
+    const btField = document.getElementById('bt');
+    if (btField && btField.value.toString().trim()) {
+        if (!validateNumberRange(btField, 'btError', 30, 45, 'Please enter a valid body temperature (30-45°C)')) {
+            isValid = false;
+        }
+    }
+
+    const rrField = document.getElementById('rr');
+    if (rrField && rrField.value.toString().trim()) {
+        if (!validateNumberRange(rrField, 'rrError', 6, 60, 'Please enter a valid respiration rate (6-60)')) {
+            isValid = false;
+        }
+    }
+
+    const sbpField = document.getElementById('sbp');
+    if (sbpField && sbpField.value.toString().trim()) {
+        if (!validateNumberRange(sbpField, 'sbpError', 50, 250, 'Please enter a valid systolic BP (50-250 mmHg)')) {
+            isValid = false;
+        }
+    }
+
+    const dbpField = document.getElementById('dbp');
+    if (dbpField && dbpField.value.toString().trim()) {
+        if (!validateNumberRange(dbpField, 'dbpError', 30, 140, 'Please enter a valid diastolic BP (30-140 mmHg)')) {
+            isValid = false;
+        }
+    }
+
+    if (sbpField && dbpField) {
+        const sbp = toFiniteNumber(sbpField.value);
+        const dbp = toFiniteNumber(dbpField.value);
+        if (sbp !== null && dbp !== null && dbp >= sbp) {
+            showError(dbpField, 'dbpError', 'Diastolic BP must be lower than systolic BP');
+            isValid = false;
+        }
     }
     
     return isValid;
@@ -174,24 +348,47 @@ function validateField(event) {
         clearError(field, errorId);
         
         // Additional field-specific validation
+        if (fieldId === 'dateOfBirth') {
+            validateDateOfBirth();
+        }
+
         if (fieldId === 'hr') {
-            const value = parseFloat(field.value);
-            if (value && (value < 30 || value > 200)) {
-                showError(field, errorId, 'Please enter a valid heart rate (30-200 bpm)');
-            }
+            validateNumberRange(field, errorId, 25, 250, 'Please enter a valid heart rate (25-250 bpm)');
         }
-        
+
         if (fieldId === 'saturation') {
-            const value = parseFloat(field.value);
-            if (value && (value < 0 || value > 100)) {
-                showError(field, errorId, 'Please enter valid saturation (0-100%)');
+            validateNumberRange(field, errorId, 50, 100, 'Please enter valid saturation (50-100%)');
+        }
+
+        if (fieldId === 'nrs_pain') {
+            validateNumberRange(field, errorId, 0, 10, 'Please enter valid pain scale (0-10)');
+        }
+
+        if (fieldId === 'bt') {
+            validateNumberRange(field, errorId, 30, 45, 'Please enter a valid body temperature (30-45°C)');
+        }
+
+        if (fieldId === 'rr') {
+            validateNumberRange(field, errorId, 6, 60, 'Please enter a valid respiration rate (6-60)');
+        }
+
+        if (fieldId === 'sbp') {
+            validateNumberRange(field, errorId, 50, 250, 'Please enter a valid systolic BP (50-250 mmHg)');
+            const dbpField = document.getElementById('dbp');
+            const sbp = toFiniteNumber(field.value);
+            const dbp = dbpField ? toFiniteNumber(dbpField.value) : null;
+            if (dbpField && sbp !== null && dbp !== null && dbp >= sbp) {
+                showError(dbpField, 'dbpError', 'Diastolic BP must be lower than systolic BP');
             }
         }
-        
-        if (fieldId === 'nrs_pain') {
-            const value = parseFloat(field.value);
-            if (value && (value < 0 || value > 10)) {
-                showError(field, errorId, 'Please enter valid pain scale (0-10)');
+
+        if (fieldId === 'dbp') {
+            validateNumberRange(field, errorId, 30, 140, 'Please enter a valid diastolic BP (30-140 mmHg)');
+            const sbpField = document.getElementById('sbp');
+            const dbp = toFiniteNumber(field.value);
+            const sbp = sbpField ? toFiniteNumber(sbpField.value) : null;
+            if (sbpField && sbp !== null && dbp !== null && dbp >= sbp) {
+                showError(field, errorId, 'Diastolic BP must be lower than systolic BP');
             }
         }
     }
@@ -341,5 +538,20 @@ async function sendToBackend(patientData) {
         console.error("Backend communication error:", error);
         throw error;
     }
+}
+function calculateAgeFromDOB(dob) {
+    const birthDate = parseISODateToLocalDate(dob);
+    if (!birthDate) return NaN;
+    const today = new Date();
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || 
+        (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+    return age;
 }
 

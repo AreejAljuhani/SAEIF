@@ -74,7 +74,7 @@
             </div>
 
             <!-- Registration Form -->
-            <form class="registration-form" id="patientForm">
+            <form class="registration-form" id="patientForm" novalidate>
                 <!-- Personal Information Section -->
                 <section class="form-section">
                     <h2 class="section-title">
@@ -98,15 +98,15 @@
                             <div class="error-message" id="sexError">Please select gender</div>
                         </div>
                         <div class="form-group">
-                            <label for="age" class="form-label required-field">Age (Years)</label>
-                            <input type="number" id="age" name="age" class="form-input"
-                                placeholder="Enter patient age" min="0" max="150" required>
-                            <div class="error-message" id="ageError">Please enter valid age</div>
-                        </div>
-                        <div class="form-group">
                             <label for="dateOfBirth" class="form-label required-field">Date of Birth</label>
                             <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-input" required>
                             <div class="error-message" id="dateOfBirthError">Please select date of birth</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="age" class="form-label">Age (Years)</label>
+                            <input type="number" id="age" name="age" class="form-input"
+                                placeholder="Auto-calculated" min="0" max="150" readonly>
+                            <div class="error-message" id="ageError">Please enter valid age</div>
                         </div>
                     </div>
                 </section>
@@ -199,38 +199,38 @@
                         <div class="form-group">
                             <label for="saturation" class="form-label required-field">Saturation (O2)</label>
                             <input type="number" id="saturation" name="saturation" class="form-input"
-                                placeholder="%" min="0" max="100" step="0.1" required>
-                            <div class="error-message" id="saturationError">Please enter oxygen saturation</div>
+                                placeholder="%" min="50" max="100" step="0.1" required>
+                            <div class="error-message" id="saturationError">Please enter oxygen saturation (50-100%)</div>
                         </div>
                         <div class="form-group">
                             <label for="bt" class="form-label required-field">Body Temperature (°C)</label>
                             <input type="number" id="bt" name="bt" class="form-input" placeholder="°C"
-                                step="0.1" required>
-                            <div class="error-message" id="btError">Please enter body temperature</div>
+                                step="0.1" min="30" max="45" required>
+                            <div class="error-message" id="btError">Please enter body temperature (30-45°C)</div>
                         </div>
                         <div class="form-group">
                             <label for="rr" class="form-label required-field">Respiration Rate</label>
                             <input type="number" id="rr" name="rr" class="form-input"
-                                placeholder="breaths/min" min="0" required>
-                            <div class="error-message" id="rrError">Please enter respiration rate</div>
+                                placeholder="breaths/min" min="6" max="60" required>
+                            <div class="error-message" id="rrError">Please enter respiration rate (6-60)</div>
                         </div>
                         <div class="form-group">
                             <label for="hr" class="form-label required-field">Heart Rate</label>
                             <input type="number" id="hr" name="hr" class="form-input" placeholder="bpm"
-                                min="0" required>
-                            <div class="error-message" id="hrError">Please enter heart rate</div>
+                                min="25" max="250" required>
+                            <div class="error-message" id="hrError">Please enter heart rate (25-250 bpm)</div>
                         </div>
                         <div class="form-group">
                             <label for="dbp" class="form-label required-field">Diastolic Blood Pressure</label>
                             <input type="number" id="dbp" name="dbp" class="form-input" placeholder="mmHg"
-                                min="0" required>
-                            <div class="error-message" id="dbpError">Please enter diastolic BP</div>
+                                min="30" max="140" required>
+                            <div class="error-message" id="dbpError">Please enter diastolic BP (30-140 mmHg)</div>
                         </div>
                         <div class="form-group">
                             <label for="sbp" class="form-label required-field">Systolic Blood Pressure</label>
                             <input type="number" id="sbp" name="sbp" class="form-input" placeholder="mmHg"
-                                min="0" required>
-                            <div class="error-message" id="sbpError">Please enter systolic BP</div>
+                                min="50" max="250" required>
+                            <div class="error-message" id="sbpError">Please enter systolic BP (50-250 mmHg)</div>
                         </div>
                     </div>
                 </section>
