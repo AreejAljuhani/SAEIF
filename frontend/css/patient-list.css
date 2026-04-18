@@ -1,0 +1,339 @@
+/* ── Page header ── */
+.pl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+/* ── Triage guide bar ── */
+.ctas-guide-bar {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.ctas-guide-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-right: 6px;
+}
+.ctas-guide-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.guide-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+}
+.guide-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+
+/* CTAS guide pill colors */
+.ctas1-guide { background: #fff5f5; color: #c53030; border-color: #feb2b2; }
+.ctas1-guide .guide-dot { background: #e53e3e; }
+.ctas2-guide { background: #fffaf0; color: #c05621; border-color: #fbd38d; }
+.ctas2-guide .guide-dot { background: #dd6b20; }
+.ctas3-guide { background: #fffff0; color: #b7791f; border-color: #faf089; }
+.ctas3-guide .guide-dot { background: #d69e2e; }
+.ctas4-guide { background: #f0fff4; color: #276749; border-color: #9ae6b4; }
+.ctas4-guide .guide-dot { background: #38a169; }
+.ctas5-guide { background: #ebf8ff; color: #2b6cb0; border-color: #bee3f8; }
+.ctas5-guide .guide-dot { background: #3182ce; }
+
+/* ── CTAS counts row ── */
+.ctas-counts-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 1.25rem;
+}
+.ctas-count-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  overflow: hidden;
+  border-top: 3px solid transparent;
+}
+.ctas-count-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #64748b;
+}
+.ctas-count-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+.ctas-count-icon {
+  font-size: 0.9rem;
+  opacity: 0.5;
+}
+
+/* CTAS count card colors */
+.ctas1-card { border-top-color: #e53e3e; }
+.ctas1-card .ctas-count-number { color: #e53e3e; }
+.ctas1-card .ctas-count-icon   { color: #e53e3e; }
+
+.ctas2-card { border-top-color: #dd6b20; }
+.ctas2-card .ctas-count-number { color: #dd6b20; }
+.ctas2-card .ctas-count-icon   { color: #dd6b20; }
+
+.ctas3-card { border-top-color: #d69e2e; }
+.ctas3-card .ctas-count-number { color: #d69e2e; }
+.ctas3-card .ctas-count-icon   { color: #d69e2e; }
+
+.ctas4-card { border-top-color: #38a169; }
+.ctas4-card .ctas-count-number { color: #38a169; }
+.ctas4-card .ctas-count-icon   { color: #38a169; }
+
+.ctas5-card { border-top-color: #3182ce; }
+.ctas5-card .ctas-count-number { color: #3182ce; }
+.ctas5-card .ctas-count-icon   { color: #3182ce; }
+
+/* ── Filters ── */
+.filters-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+  align-items: flex-end;
+}
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.filter-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-input-wrap i {
+  position: absolute;
+  left: 10px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+.filter-input {
+  padding: 8px 12px 8px 30px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: #1e293b;
+  background: #fff;
+  width: 200px;
+  outline: none;
+  transition: border-color 0.15s;
+  font-family: inherit;
+}
+.filter-input:focus { border-color: #3b82f6; }
+.filter-select {
+  padding: 8px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: #1e293b;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  font-family: inherit;
+  min-width: 120px;
+}
+.filter-select:focus { border-color: #3b82f6; }
+
+/* ── Patient list ── */
+.patient-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Patient card ── */
+.patient-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-left: 4px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: box-shadow 0.2s, transform 0.15s;
+  animation: slide-in 0.2s ease;
+}
+.patient-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* border colors by CTAS */
+.patient-card.ctas-1 { border-left-color: #e53e3e; }
+.patient-card.ctas-2 { border-left-color: #dd6b20; }
+.patient-card.ctas-3 { border-left-color: #d69e2e; }
+.patient-card.ctas-4 { border-left-color: #38a169; }
+.patient-card.ctas-5 { border-left-color: #3182ce; }
+
+/* Avatar */
+.patient-avatar {
+  width: 40px; height: 40px;
+  background: #f1f5f9;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #64748b;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* Info section */
+.patient-info { flex: 1; min-width: 0; }
+.patient-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.patient-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* Status badges */
+.status-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: capitalize;
+}
+.status-waiting    { background: #eff6ff; color: #1d4ed8; }
+.status-monitoring { background: #f0fdf4; color: #15803d; }
+.status-under-treatment { background: #fff7ed; color: #c2410c; }
+
+/* IoT badge */
+.iot-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #86efac;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.patient-meta {
+  font-size: 0.76rem;
+  color: #64748b;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-bottom: 6px;
+}
+.patient-meta span { display: flex; align-items: center; gap: 4px; }
+.patient-meta i { font-size: 0.68rem; }
+
+.patient-complaint {
+  font-size: 0.76rem;
+  color: #475569;
+  font-style: italic;
+}
+.complaint-label {
+  font-weight: 600;
+  font-style: normal;
+  color: #64748b;
+  margin-right: 4px;
+}
+
+/* CTAS pill */
+.ctas-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+.ctas-pill.ctas-1 { background: #fff5f5; color: #c53030; border: 1px solid #feb2b2; }
+.ctas-pill.ctas-2 { background: #fffaf0; color: #c05621; border: 1px solid #fbd38d; }
+.ctas-pill.ctas-3 { background: #fffff0; color: #b7791f; border: 1px solid #faf089; }
+.ctas-pill.ctas-4 { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+.ctas-pill.ctas-5 { background: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8; }
+
+/* Wait time */
+.wait-time {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.wait-time i { font-size: 0.68rem; }
+
+/* ── Empty state ── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  color: #94a3b8;
+  gap: 0.75rem;
+  text-align: center;
+}
+.empty-state i { font-size: 2.5rem; opacity: 0.4; }
+.empty-state p  { font-size: 0.95rem; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .ctas-counts-row { grid-template-columns: repeat(3, 1fr); }
+  .filters-row { flex-direction: column; }
+  .filter-input { width: 100%; }
+}
+@media (max-width: 480px) {
+  .ctas-counts-row { grid-template-columns: repeat(2, 1fr); }
+}

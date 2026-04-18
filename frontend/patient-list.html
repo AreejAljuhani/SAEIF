@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saeif - ED Patient Board</title>
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/patient-list.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<div class="container">
+
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="assets/saeif-logo1.png" class="logo-img">
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="home.html" class="nav-item">
+        <i class="fas fa-home nav-icon"></i>
+        <span class="nav-text">Home</span>
+      </a>
+
+      <a href="patient-registration.html" class="nav-item">
+        <i class="fas fa-folder-open nav-icon"></i>
+        <span class="nav-text">Emergency Triage</span>
+      </a>
+
+      <a href="patient-list.html" class="nav-item active">
+        <i class="fas fa-file-alt nav-icon"></i>
+        <span class="nav-text">ED Patient Board</span>
+      </a>
+
+      <a href="iot-monitoring.html" class="nav-item">
+        <i class="fas fa-heartbeat nav-icon"></i>
+        <span class="nav-text">Vital Signs Monitoring</span>
+      </a>
+
+      <a href="alerts.html" class="nav-item">
+        <i class="fas fa-bell nav-icon"></i>
+        <span class="nav-text">Clinical Alerts</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <img src="assets/map-icon.png" class="sidebar-map">
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <section class="emergency-overview">
+
+      <!-- Page title -->
+      <div class="pl-header">
+        <h2 class="section-title" style="margin-bottom:0;border-bottom:none;padding-bottom:0;">
+          ED Patient Board
+        </h2>
+      </div>
+
+      <!-- CTAS Guide -->
+      <div class="ctas-guide-bar">
+        <div class="ctas-guide-label">Triage Classification Guide</div>
+        <div class="ctas-guide-pills">
+          <span class="guide-pill ctas1-guide"><span class="guide-dot"></span>CTAS-1 Immediate attention</span>
+          <span class="guide-pill ctas2-guide"><span class="guide-dot"></span>CTAS-2 Within 15 minutes</span>
+          <span class="guide-pill ctas3-guide"><span class="guide-dot"></span>CTAS-3 Within 30 minutes</span>
+          <span class="guide-pill ctas4-guide"><span class="guide-dot"></span>CTAS-4 Within 60 minutes</span>
+          <span class="guide-pill ctas5-guide"><span class="guide-dot"></span>CTAS-5 Within 120 minutes</span>
+        </div>
+      </div>
+
+      <!-- CTAS Counts -->
+      <div class="ctas-counts-row">
+
+        <div class="ctas-count-card ctas1-card">
+          <div class="ctas-count-label">CTAS-1</div>
+          <div class="ctas-count-number" id="count-1">–</div>
+          <i class="fas fa-exclamation-circle ctas-count-icon"></i>
+        </div>
+
+        <div class="ctas-count-card ctas2-card">
+          <div class="ctas-count-label">CTAS-2</div>
+          <div class="ctas-count-number" id="count-2">–</div>
+          <i class="fas fa-exclamation-triangle ctas-count-icon"></i>
+        </div>
+
+        <div class="ctas-count-card ctas3-card">
+          <div class="ctas-count-label">CTAS-3</div>
+          <div class="ctas-count-number" id="count-3">–</div>
+          <i class="fas fa-clock ctas-count-icon"></i>
+        </div>
+
+        <div class="ctas-count-card ctas4-card">
+          <div class="ctas-count-label">CTAS-4</div>
+          <div class="ctas-count-number" id="count-4">–</div>
+          <i class="fas fa-check-circle ctas-count-icon"></i>
+        </div>
+
+        <div class="ctas-count-card ctas5-card">
+          <div class="ctas-count-label">CTAS-5</div>
+          <div class="ctas-count-number" id="count-5">–</div>
+          <i class="fas fa-circle ctas-count-icon"></i>
+        </div>
+
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-row">
+
+        <div class="filter-group">
+          <label class="filter-label">Search name</label>
+          <div class="search-input-wrap">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" class="filter-input" placeholder="Search patient...">
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Classification</label>
+          <select id="ctasFilter" class="filter-select">
+            <option value="all">All</option>
+            <option value="1">CTAS-1</option>
+            <option value="2">CTAS-2</option>
+            <option value="3">CTAS-3</option>
+            <option value="4">CTAS-4</option>
+            <option value="5">CTAS-5</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Gender</label>
+          <select id="genderFilter" class="filter-select">
+            <option value="all">All</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Patient list -->
+      <div id="patientList" class="patient-list"></div>
+
+      <!-- Empty state -->
+      <div id="emptyState" class="empty-state" style="display:none;">
+        <i class="fas fa-users"></i>
+        <p>No patients found</p>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/patient-list.js"></script>
+
+</body>
+</html>
