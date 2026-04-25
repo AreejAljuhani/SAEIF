@@ -1,11 +1,12 @@
-/* ===== RESET أساسي ===== */
+html, body {
+  height: 100%;
+}
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* ===== متغيرات الألوان المشتركة ===== */
 :root {
   --primary-blue: #1a365d;
   --primary-light: #2d5b8a;
@@ -25,7 +26,6 @@
   --shadow-hover: 0 8px 22px rgba(0, 0, 0, 0.10);
 }
 
-/* ===== body + layout العام ===== */
 body {
   font-family: "Inter", sans-serif;
   background: var(--background);
@@ -37,7 +37,6 @@ body {
   min-height: 100vh;
 }
 
-/* ===== Sidebar مشترك ===== */
 .sidebar {
     width: 260px;
     background: var(--sidebar-bg);
@@ -104,7 +103,6 @@ body {
   opacity: 0.85;
 }
 
-/* قسم الخريطة في الأسفل */
 .sidebar-footer {
     width: 100%;
     padding: 1.5rem;
@@ -124,7 +122,6 @@ body {
     opacity: 0.9;
 }
 
-/* ===== مساحة المحتوى الرئيسية ===== */
 .main-content {
   flex: 1;
   padding: 2rem;
@@ -132,7 +129,6 @@ body {
   overflow-x: visible;
 }
 
-/* panel أساسي (تقدرين تستخدمينه في كل الصفحات) */
 .panel {
   width: min(980px, 92%);
   background: var(--card-bg);

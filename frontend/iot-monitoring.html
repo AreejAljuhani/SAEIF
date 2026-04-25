@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="required-role" content="nurse">
 <title>Saeif - Vital Signs Monitoring</title>
-
+<style id="flashHide">body{visibility:hidden}</style>
 <link rel="stylesheet" href="css/global.css">
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,7 +17,6 @@
 
 <div class="container">
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
       <img src="assets/saeif-logo1.png" class="logo-img">
@@ -35,7 +35,6 @@
     </div>
   </aside>
 
-  <!-- MAIN -->
   <main class="main-content">
 
     <section class="emergency-overview">
@@ -56,7 +55,6 @@
   </main>
 </div>
 
-<!-- ══ PATIENT DETAILS MODAL ══ -->
 <div class="modal-overlay" id="detailsModal">
 
   <div class="modal-box">
@@ -71,7 +69,6 @@
       </button>
     </div>
 
-    <!-- Patient info -->
     <div class="modal-patient-card">
       <div class="modal-patient-name" id="modal-name">--</div>
 
@@ -83,7 +80,6 @@
       </div>
     </div>
 
-    <!-- Vitals -->
     <div class="modal-vitals-title">
       <i class="fas fa-chart-line"></i> Live Vital Signs
     </div>
@@ -113,7 +109,6 @@
 
     </div>
 
-    <!-- Alert box -->
     <div class="modal-alert-box" id="modal-alert-box">
       <div class="modal-alert-header">
         <i class="fas fa-exclamation-triangle"></i> Active Alerts
@@ -121,7 +116,6 @@
       <div id="modal-alert-list"></div>
     </div>
 
-    <!-- Actions -->
     <div class="modal-actions">
       <button class="btn-cancel-modal" onclick="closeDetailsModal()">Close</button>
       <button class="btn-stop-monitoring" onclick="openStopModal()">
@@ -132,7 +126,6 @@
   </div>
 </div>
 
-<!-- ══ STOP MONITORING MODAL ══ -->
 <div class="modal-overlay" id="stopModal">
 
   <div class="stop-modal-box">
@@ -169,12 +162,13 @@
   </div>
 </div>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 
 <script src="js/firebase-config.js"></script>
+<script src="js/auth-guard.js"></script>
 <script src="js/iot-monitoring.js"></script>
 
 </body>

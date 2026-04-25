@@ -4,23 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="required-role" content="nurse">
     <title>Saeif - Emergency Department System</title>
+    <style id="flashHide">body{visibility:hidden}</style>
 
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/home.css">
 
-    <!-- Font Awesome Icons for UI elements -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 <div class="container">
 
-    <!-- Sidebar Navigation -->
     <aside class="sidebar">
         <div class="logo">
             <img src="assets/saeif-logo1.png" alt="Saeif Logo" class="logo-img">
@@ -58,10 +56,8 @@
         </div>
     </aside>
 
-    <!-- Main Content Dashboard -->
     <main class="main-content">
 
-        <!-- Patient Stats top cards -->
         <section class="patient-stats-section" aria-labelledby="patient-stats-title">
 
             <div class="stat-card patient-count">
@@ -102,7 +98,6 @@
 
         </section>
 
-        <!-- CTAS Overview grid -->
         <section class="emergency-overview" aria-labelledby="emergency-overview-title">
             <h2 class="section-title" id="emergency-overview-title">Emergency Department Overview</h2>
 
@@ -155,10 +150,11 @@
     </main>
 </div>
 
-<!-- Firebase + JS -->
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="js/firebase-config.js"></script>
+<script src="js/auth-guard.js"></script>
 <script src="js/home.js"></script>
 
 </body>

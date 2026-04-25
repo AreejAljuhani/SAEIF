@@ -4,24 +4,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="required-role" content="nurse">
   <title>Saeif - Patient Reclassification</title>
-
-   <!-- Stylesheets -->
+  <style id="flashHide">body{visibility:hidden}</style>
   <link rel="stylesheet" href="css/global.css" />
   <link rel="stylesheet" href="css/patient-reclassification.css" />
 
-  <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 
 <body>
   <div class="container">
     
-    <!-- Main Navigation Sidebar -->
     <aside class="sidebar">
-      <!-- Logo -->
       <div class="logo">
         <img src="assets/saeif-logo1.png" alt="Saeif Logo" class="logo-img">
       </div>
@@ -53,14 +49,12 @@
         </a>
       </nav>
 
-      <!-- Map Icon -->
       <div class="sidebar-footer">
         <img src="assets/map-icon.png" alt="World map" class="sidebar-map">
       </div>
     </aside>
 
 
-    <!-- Main -->
     <main class="main-content">
       <section class="panel">
         <div class="panel-header">
@@ -68,7 +62,6 @@
           <a href="show-result.html" class="cancel-link">Cancel <i class="fa-solid fa-arrow-right"></i></a>
         </div>
 
-        <!-- Patient Info Card -->
         <div class="patient-mini">
           <div class="avatar"><i class="fa-regular fa-user"></i></div>
           <div class="patient-info">
@@ -92,7 +85,6 @@
 
         <hr class="divider" />
 
-        <!-- CTAS Level Selection -->
         <h2 class="section-title">Select the new level</h2>
 
         <div class="ctas-levels">
@@ -104,20 +96,17 @@
         </div>
 
 
-        <!-- Reason for Reclassification -->
         <div class="field">
           <label>Reason for Reclassification</label>
           <textarea placeholder="Writing down the reason for reclassification"></textarea>
         </div>
 
-        <!-- Additional Notes -->
         <div class="field">
           <label>Additional Notes (Optional)</label>
           <textarea
             placeholder="Write any additional notes that help document the reason for reclassification..."></textarea>
         </div>
 
-        <!-- Action Button -->
         <div class="actions">
           <button class="btn primary">Confirm Reclassification</button>
         </div>
@@ -125,8 +114,8 @@
     </main>
   </div>
 
-  <!-- JavaScript -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
     <script>
@@ -144,6 +133,7 @@
       firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
     </script>
+    <script src="js/auth-guard.js"></script>
 <script src="js/patient-reclassification.js"></script>
 </body>
 </html>

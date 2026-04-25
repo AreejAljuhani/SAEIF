@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="required-role" content="nurse">
 <title>Saeif - Clinical Alerts</title>
-
+<style id="flashHide">body{visibility:hidden}</style>
 <link rel="stylesheet" href="css/global.css">
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,7 +17,6 @@
 
 <div class="container">
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
       <img src="assets/saeif-logo1.png" class="logo-img">
@@ -35,7 +35,6 @@
     </div>
   </aside>
 
-  <!-- MAIN -->
   <main class="main-content">
 
     <section class="emergency-overview">
@@ -58,11 +57,12 @@
   </main>
 </div>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 
 <script src="js/firebase-config.js"></script>
+<script src="js/auth-guard.js"></script>
 <script src="js/alerts.js"></script>
 
 </body>
