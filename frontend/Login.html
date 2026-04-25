@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saeif — Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+ 
+<div class="login-wrapper">
+ 
+  <div class="logo-area">
+    <img src="assets/saeif-logo.png" alt="Saeif"
+      onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='block'">
+    <div class="logo-fallback">Saeif</div>
+    <p class="tagline">Emergency Department Management System</p>
+  </div>
+ 
+  <div class="card">
+ 
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('login')">Sign In</button>
+      <button class="tab-btn" onclick="switchTab('signup')">Create Account</button>
+    </div>
+ 
+    <div class="alert-msg hidden" id="alertMsg">
+      <i class="fas fa-exclamation-circle"></i>
+      <span id="alertText"></span>
+    </div>
+ 
+    <div class="form-panel active" id="loginPanel">
+      <h2 class="form-title">Welcome back</h2>
+      <p class="form-subtitle">Sign in to your Saeif account</p>
+ 
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <div class="input-wrap">
+          <i class="fas fa-envelope"></i>
+          <input type="email" class="form-input" id="loginEmail" placeholder="name@hospital.com">
+        </div>
+      </div>
+ 
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" class="form-input" id="loginPassword" placeholder="••••••••">
+        </div>
+      </div>
+ 
+      <div class="forgot-wrap">
+        <button type="button" class="forgot-btn" onclick="resetPassword()">
+          Forgot password?
+        </button>
+      </div>
+ 
+      <button class="btn-submit" id="loginBtn" onclick="handleLogin()">
+        <i class="fas fa-sign-in-alt"></i> Sign In
+      </button>
+    </div>
+ 
+    <div class="form-panel" id="signupPanel">
+      <h2 class="form-title">Create account</h2>
+      <p class="form-subtitle">Join the Saeif system</p>
+ 
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <div class="input-wrap">
+          <i class="fas fa-user"></i>
+          <input type="text" class="form-input" id="signupName" placeholder="Dr. / Nurse Name">
+          <div class="field-msg" id="nameMsg"></div>
+        </div>
+      </div>
+ 
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <div class="input-wrap">
+          <i class="fas fa-envelope"></i>
+          <input type="email" class="form-input" id="signupEmail" placeholder="name@hospital.com">
+          <div class="field-msg" id="emailMsg"></div>
+        </div>
+      </div>
+ 
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" class="form-input" id="signupPassword"
+            placeholder="Min 6 characters" oninput="checkPasswordStrength(this.value)">
+            <div class="field-msg" id="passMsg"></div>
+        </div>
+        <div class="strength-bar" id="strengthBar">
+          <div class="strength-segments">
+            <div class="strength-seg" id="seg1"></div>
+            <div class="strength-seg" id="seg2"></div>
+            <div class="strength-seg" id="seg3"></div>
+            <div class="strength-seg" id="seg4"></div>
+          </div>
+          <span class="strength-text" id="strengthText"></span>
+        </div>
+      </div>
+ 
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" class="form-input" id="confirmPassword"
+            placeholder="Re-enter password" oninput="checkPasswordMatch()">
+        </div>
+        <div class="match-msg" id="matchMsg"></div>
+      </div>
+
+        <input type="hidden" id="selectedRole" value="nurse">
+ 
+      <button class="btn-submit" id="signupBtn" onclick="handleSignup()">
+        <i class="fas fa-user-plus"></i> Create Account
+      </button>
+    </div>
+ 
+  </div>
+ 
+  <p class="footer-note">© 2024 Saeif — Emergency Department System</p>
+</div>
+ 
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>
