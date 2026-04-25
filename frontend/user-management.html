@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="required-role" content="admin">
+<title>Saeif — User Management</title>
+<style id="flashHide">body{visibility:hidden}</style>
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/user-management.css">
+</head>
+<body>
+
+<div class="container">
+
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="assets/saeif-logo1.png" class="logo-img"
+        onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='block'">
+      <div class="logo-fallback" style="display:none;">Saeif</div>
+    </div>
+<nav class="sidebar-nav">
+  <a href="admin-dashboard.html" class="nav-item">
+    <i class="fas fa-chart-line nav-icon"></i>
+    <span class="nav-text">Dashboard</span>
+  </a>
+  <a href="user-management.html" class="nav-item active">
+    <i class="fas fa-users-cog nav-icon"></i>
+    <span class="nav-text">User Management</span>
+  </a>
+  <a href="crowding-fellow.html" class="nav-item">
+    <i class="fas fa-hospital nav-icon"></i>
+    <span class="nav-text">Crowding Fellow</span>
+  </a>
+  <a href="admin-alerts.html" class="nav-item">
+    <i class="fas fa-bell nav-icon"></i>
+    <span class="nav-text">Alerts</span>
+  </a>
+</nav>
+
+<div class="sidebar-footer">
+  <div class="admin-info">
+    <div class="admin-avatar"><i class="fas fa-user-shield"></i></div>
+    <div class="admin-details">
+      <span class="admin-name" id="currentUserName">Admin</span>
+      <span class="admin-role">Administrator</span>
+    </div>
+  </div>
+  <button class="signout-btn" onclick="signOut()">
+    <i class="fas fa-sign-out-alt"></i>
+  </button>
+</div>
+  </aside>
+
+  <main class="main-content">
+
+<section class="patient-stats-section">
+  <div class="stat-card" style="border-left-color:#3182ce; color:#3182ce;">
+    <div class="stat-icon"><i class="fas fa-users"></i></div>
+    <div class="stat-number" id="totalUsers">—</div>
+    <div class="stat-label">Total Accounts</div>
+  </div>
+  <div class="stat-card" style="border-left-color:#38a169; color:#38a169;">
+    <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+    <div class="stat-number" id="activeUsers">—</div>
+    <div class="stat-label">Active Accounts</div>
+  </div>
+  <div class="stat-card" style="border-left-color:#e53e3e; color:#e53e3e;">
+    <div class="stat-icon"><i class="fas fa-user-slash"></i></div>
+    <div class="stat-number" id="disabledUsers">—</div>
+    <div class="stat-label">Disabled Accounts</div>
+  </div>
+</section>
+
+<section class="emergency-overview">
+  <div class="um-header">
+    <h2 class="section-title">Staff Accounts</h2>
+    <div class="um-controls">
+      <div class="search-wrap">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search by name or email..." oninput="filterUsers()">
+      </div>
+      <select class="filter-select" id="roleFilter" onchange="filterUsers()">
+        <option value="">All Roles</option>
+        <option value="nurse">Medical Staff</option>
+        <option value="admin">Admin</option>
+      </select>
+      <select class="filter-select" id="statusFilter" onchange="filterUsers()">
+        <option value="">All Status</option>
+        <option value="active">Active</option>
+        <option value="disabled">Disabled</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="loadingState" class="loading-state">
+    <i class="fas fa-spinner fa-spin"></i>
+    <span>Loading accounts...</span>
+  </div>
+
+  <div id="emptyState" class="empty-state" style="display:none;">
+    <i class="fas fa-users-slash"></i>
+    <div class="empty-title">No accounts found</div>
+    <div class="empty-sub">Try adjusting your search or filters</div>
+  </div>
+
+  <div id="tableWrap" class="table-wrap" style="display:none;">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Created</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="usersTableBody"></tbody>
+    </table>
+  </div>
+</section>
+
+  </main>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" style="display:none;">
+  <div class="modal-card">
+    <div class="modal-icon" id="modalIcon"></div>
+    <h3 class="modal-title" id="modalTitle"></h3>
+    <p class="modal-msg" id="modalMsg"></p>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-btn confirm" id="modalConfirmBtn">Confirm</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/user-management.js"></script>
+
+</body>
+</html>

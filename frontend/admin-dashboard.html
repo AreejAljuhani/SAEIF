@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="required-role" content="admin">
+<title>Saeif — Admin Portal</title>
+<style id="flashHide">body{visibility:hidden}</style>
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin-dashboard.css">
+</head>
+<body>
+
+<div class="admin-portal">
+
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <img src="assets/saeif-logo.png" class="logo-img"
+        onerror="this.style.display='none'; document.querySelector('.logo-text').style.display='block'">
+      <span class="logo-text" style="display:none;">Saeif</span>
+      <span class="top-divider"></span>
+      <span class="top-label">Admin Portal</span>
+    </div>
+    <div class="top-bar-right">
+      <span class="admin-greeting">Welcome, <strong id="currentUserName">Admin</strong></span>
+      <button class="signout-btn" onclick="signOut()" title="Sign out">
+        <i class="fas fa-sign-out-alt"></i> Sign Out
+      </button>
+    </div>
+  </header>
+
+  <main class="portal-main">
+
+<div class="portal-hero">
+  <h1 class="portal-title">Admin Control Panel</h1>
+  <p class="portal-sub">Manage the Emergency Department system from one place</p>
+</div>
+
+<div class="portal-cards">
+
+  <a href="user-management.html" class="portal-card">
+    <div class="card-icon-wrap blue">
+      <i class="fas fa-users-cog"></i>
+    </div>
+    <div class="card-body">
+      <h2 class="card-title">User Management</h2>
+      <p class="card-desc">View, disable, or remove hospital staff accounts</p>
+    </div>
+    <div class="card-arrow">
+      <i class="fas fa-arrow-right"></i>
+    </div>
+  </a>
+
+  <a href="crowding-fellow.html" class="portal-card">
+    <div class="card-icon-wrap purple">
+      <i class="fas fa-hospital-user"></i>
+    </div>
+    <div class="card-body">
+      <h2 class="card-title">Crowding Fellow Dashboard</h2>
+      <p class="card-desc">Monitor ED capacity and available physician resources</p>
+    </div>
+    <div class="card-arrow">
+      <i class="fas fa-arrow-right"></i>
+    </div>
+  </a>
+
+  <a href="admin-alerts.html" class="portal-card">
+    <div class="card-icon-wrap red">
+      <i class="fas fa-bell"></i>
+    </div>
+    <div class="card-body">
+      <h2 class="card-title">Clinical Alerts</h2>
+      <p class="card-desc">Review and track active deterioration alerts across the ED</p>
+    </div>
+    <div class="card-arrow">
+      <i class="fas fa-arrow-right"></i>
+    </div>
+  </a>
+
+</div>
+  </main>
+
+  <footer class="portal-footer">© 2024 Saeif — Emergency Department System</footer>
+
+</div>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth-guard.js"></script>
+</body>
+</html>
