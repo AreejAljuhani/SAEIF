@@ -245,8 +245,77 @@
   text-transform: capitalize;
 }
 .status-waiting    { background: #eff6ff; color: #1d4ed8; }
-.status-monitoring { background: #f0fdf4; color: #15803d; }
-.status-under-treatment { background: #fff7ed; color: #c2410c; }
+.status-in-progress { background: #fff7ed; color: #c2410c; }
+.status-completed { background: #f0fdf4; color: #15803d; }
+
+/* Status control buttons */
+.patient-status-controls {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.status-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  outline: none;
+}
+
+.status-btn i {
+  font-size: 0.65rem;
+}
+
+.status-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Status button active states */
+.waiting-btn.active {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #93c5fd;
+}
+
+.progress-btn.active {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fdba74;
+}
+
+.completed-btn.active {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #86efac;
+}
+
+.waiting-btn:hover {
+  border-color: #3b82f6;
+  color: #1d4ed8;
+}
+
+.progress-btn:hover {
+  border-color: #f97316;
+  color: #c2410c;
+}
+
+.completed-btn:hover {
+  border-color: #22c55e;
+  color: #15803d;
+}
 
 /* IoT badge */
 .iot-badge {
@@ -333,7 +402,41 @@
   .ctas-counts-row { grid-template-columns: repeat(3, 1fr); }
   .filters-row { flex-direction: column; }
   .filter-input { width: 100%; }
+  
+  .patient-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .patient-info {
+    width: 100%;
+  }
+  
+  .patient-status-controls {
+    width: 100%;
+  }
+  
+  .status-btn {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .ctas-pill {
+    align-self: flex-start;
+  }
 }
+
 @media (max-width: 480px) {
   .ctas-counts-row { grid-template-columns: repeat(2, 1fr); }
+  
+  .patient-status-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .status-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

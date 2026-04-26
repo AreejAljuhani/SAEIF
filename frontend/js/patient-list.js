@@ -29,7 +29,10 @@ genderFilter.addEventListener("change", renderPatients);
 function updateCTASCounts() {
   const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
+  // Only count patients that are NOT completed
   allPatients.forEach(p => {
+    if (p.status === "completed") return; // Skip completed patients
+    
     const level = Number(p.finalCTAS || p.aiCTAS);
     if (counts[level] !== undefined) counts[level]++;
   });
@@ -55,6 +58,14 @@ function renderPatients() {
     const matchGender = genderVal === "all" || gender === genderVal;
 
     return matchName && matchCTAS && matchGender;
+  });
+
+  // Sort: in_progress first, then waiting, then completed
+  filtered.sort((a, b) => {
+    const statusOrder = { in_progress: 0, waiting: 1, completed: 2 };
+    const aOrder = statusOrder[a.status] ?? 3;
+    const bOrder = statusOrder[b.status] ?? 3;
+    return aOrder - bOrder;
   });
 
   patientListEl.innerHTML = "";
@@ -104,6 +115,21 @@ function buildCard(patient) {
       <div class="patient-complaint">
         <span class="complaint-label">Chief Complaint</span>${complaint}
       </div>
+
+      <div class="patient-status-controls">
+        <button class="status-btn waiting-btn ${status === 'waiting' ? 'active' : ''}" 
+                onclick="updatePatientStatus('${patient.id}', 'waiting')">
+          <i class="fas fa-hourglass-start"></i> Waiting
+        </button>
+        <button class="status-btn progress-btn ${status === 'in_progress' ? 'active' : ''}" 
+                onclick="updatePatientStatus('${patient.id}', 'in_progress')">
+          <i class="fas fa-stethoscope"></i> In Progress
+        </button>
+        <button class="status-btn completed-btn ${status === 'completed' ? 'active' : ''}" 
+                onclick="updatePatientStatus('${patient.id}', 'completed')">
+          <i class="fas fa-check-circle"></i> Completed
+        </button>
+      </div>
     </div>
 
     <span class="ctas-pill ctas-${ctasLevel}">CTAS ${ctasLevel || "--"}</span>
@@ -132,13 +158,28 @@ function calcWaitTime(createdAt) {
 }
 
 function getStatusClass(status) {
-  if (status === "monitoring") return "status-monitoring";
-  if (status === "under-treatment") return "status-under-treatment";
+  if (status === "in_progress") return "status-in-progress";
+  if (status === "completed") return "status-completed";
   return "status-waiting";
 }
 
 function formatStatus(status) {
-  if (status === "under-treatment") return "Under treatment";
-  if (status === "monitoring") return "Monitoring";
+  if (status === "in_progress") return "In Progress";
+  if (status === "completed") return "Completed";
   return "Waiting";
+}
+
+// Update patient status in Firebase
+async function updatePatientStatus(patientId, newStatus) {
+  try {
+    await db.collection("patients").doc(patientId).update({
+      status: newStatus,
+      statusUpdatedAt: new Date()
+    });
+    
+    console.log(`Patient ${patientId} status updated to: ${newStatus}`);
+  } catch (error) {
+    console.error("Error updating patient status:", error);
+    alert("Failed to update patient status. Please try again.");
+  }
 }
