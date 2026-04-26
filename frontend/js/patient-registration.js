@@ -561,6 +561,8 @@ async function sendToBackend(patientData) {
             chiefComplaint: patientData.chiefComplaint,
             aiCTAS: aiCTAS,
             finalCTAS: aiCTAS,
+            triageLevel: aiCTAS,
+            arrivalTime: now,
             overrideReason: null,
             status: 'waiting',
             createdAt: now.toISOString(),

@@ -1,6 +1,22 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const admin = require('firebase-admin');
+
+// Initialize Firebase Admin BEFORE loading routes
+if (!admin.apps.length) {
+    try {
+        admin.initializeApp({
+            projectId: process.env.FIREBASE_PROJECT_ID || 'saeif-healthcare'
+        });
+        console.log('✅ Firebase Admin initialized');
+    } catch (error) {
+        console.warn('⚠️  Firebase already initialized or config missing:', error.message);
+        console.log('ℹ️  If using real Firebase, set FIREBASE_PROJECT_ID environment variable');
+    }
+}
+
+// NOW load routes (after Firebase is initialized)
 const classifyRoute = require('./routes/classify');
 
 const app = express();

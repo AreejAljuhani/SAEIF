@@ -2,6 +2,61 @@ const express = require('express');
 const router = express.Router();
 const { spawn } = require('child_process');
 const path = require('path');
+const admin = require('firebase-admin');
+const { calculateWaitingTime, formatWaitingTime } = require('../utils/queueManager');
+
+// Initialize Firebase Admin (if not already initialized)
+if (!admin.apps.length) {
+    try {
+        admin.initializeApp({
+            projectId: process.env.FIREBASE_PROJECT_ID || 'saeif-healthcare',
+            databaseURL: process.env.FIREBASE_DB_URL
+        });
+    } catch (error) {
+        console.log('Firebase already initialized or error:', error.message);
+    }
+}
+
+router.post('/calculate-waiting-time', async (req, res) => {
+    try {
+        const { triageLevel, doctorsAvailable = 2 } = req.body;
+        
+        if (!triageLevel || triageLevel < 1 || triageLevel > 5) {
+            return res.status(400).json({ 
+                error: 'Invalid triage level. Must be 1-5.' 
+            });
+        }
+        
+        const result = await calculateWaitingTime(triageLevel, doctorsAvailable);
+        
+        if (!result.success) {
+            return res.status(500).json({ error: result.error });
+        }
+        
+        // Format for display
+        const formattedWaitingTime = formatWaitingTime(result.waitingTimeMinutes);
+        
+        res.json({
+            success: true,
+            triageLevel,
+            waitingTimeMinutes: result.waitingTimeMinutes,
+            waitingTimeFormatted: formattedWaitingTime,
+            patientsAhead: result.patientsAhead,
+            details: {
+                effectiveQueue: result.effectiveQueue,
+                averageTime: result.avgTime,
+                availableDoctors: result.availableDoctors,
+                formula: result.formula
+            }
+        });
+    } catch (error) {
+        console.error('Error in waiting time endpoint:', error);
+        res.status(500).json({ 
+            error: 'Failed to calculate waiting time',
+            message: error.message 
+        });
+    }
+});
 
 router.post('/classify', (req, res) => {
     const patientData = req.body;

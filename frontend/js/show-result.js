@@ -142,13 +142,62 @@ var ctasDescriptions = {
 5: "Non-urgent - Least urgency"
 };
 
-var waitingTimes = {
-1: "Immediate",
-2: "<10 minutes",
-3: "30 minutes",
-4: "1-2 hours",
-5: "2 hours"
-};
+// ================================
+// CALCULATE REALISTIC WAITING TIME
+// ================================
+async function calculateAndDisplayWaitingTime() {
+    try {
+        // Call backend to calculate waiting time
+        const response = await fetch('http://localhost:3000/api/calculate-waiting-time', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                triageLevel: prediction,
+                doctorsAvailable: 2  // You can make this dynamic from settings
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Waiting time calculated:', data);
+            
+            // Display the calculated waiting time
+            document.getElementById("waitingTime").textContent = 
+                data.waitingTimeFormatted || 'Loading...';
+            
+            // Optionally store details for debugging
+            if (window.DEBUG_MODE) {
+                console.log('Patients ahead:', data.patientsAhead);
+                console.log('Formula:', data.details.formula);
+            }
+        } else {
+            // Fallback to default times if calculation fails
+            const defaultTimes = {
+                1: "Immediate",
+                2: "< 10 minutes",
+                3: "20-30 minutes",
+                4: "30-60 minutes",
+                5: "60+ minutes"
+            };
+            document.getElementById("waitingTime").textContent = 
+                defaultTimes[prediction] || "--";
+        }
+    } catch (error) {
+        console.error('Error calculating waiting time:', error);
+        // Fallback to default times
+        const defaultTimes = {
+            1: "Immediate",
+            2: "< 10 minutes",
+            3: "20-30 minutes",
+            4: "30-60 minutes",
+            5: "60+ minutes"
+        };
+        document.getElementById("waitingTime").textContent = 
+            defaultTimes[prediction] || "--";
+    }
+}
 
 // ================================
 // UPDATE UI
@@ -159,8 +208,11 @@ isNaN(prediction) ? "--" : prediction;
 document.getElementById("ctasDescription").textContent =
 ctasDescriptions[prediction] || "Unknown classification";
 
-document.getElementById("waitingTime").textContent =
-waitingTimes[prediction] || "--";
+// Set waiting time to "Calculating..." initially
+document.getElementById("waitingTime").textContent = "Calculating...";
+
+// Calculate and display waiting time
+calculateAndDisplayWaitingTime();
 
 // ================================
 // CARD STYLE

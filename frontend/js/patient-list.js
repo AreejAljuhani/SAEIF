@@ -90,7 +90,8 @@ function buildCard(patient) {
   const isMonitoring = patient.monitoring === true;
   const complaint  = patient.chiefComplaint?.chief_complain || patient.chiefComplaint || "–";
 
-  const waitText = calcWaitTime(patient.createdAt);
+  // Use triage level for realistic waiting time calculation
+  const waitText = "Calculating...";  // Will be updated after API call
 
   card.className = `patient-card ctas-${ctasLevel}`;
 
@@ -109,7 +110,7 @@ function buildCard(patient) {
       <div class="patient-meta">
         <span><i class="fas fa-birthday-cake"></i> ${age} years old</span>
         <span><i class="fas fa-venus-mars"></i> ${gender}</span>
-        <span><i class="fas fa-clock"></i> Wait time: ${waitText}</span>
+        <span><i class="fas fa-clock"></i> Wait time: <span id="wait-${patient.id}" class="wait-time-text">${waitText}</span></span>
       </div>
 
       <div class="patient-complaint">
@@ -135,10 +136,57 @@ function buildCard(patient) {
     <span class="ctas-pill ctas-${ctasLevel}">CTAS ${ctasLevel || "--"}</span>
   `;
 
+  // Calculate realistic waiting time asynchronously
+  if (ctasLevel && status === "waiting") {
+    calculateRealisticWaitTime(ctasLevel).then(waitTime => {
+      const waitElement = card.querySelector(`#wait-${patient.id}`);
+      if (waitElement) {
+        waitElement.textContent = waitTime;
+      }
+    }).catch(err => {
+      console.warn('Could not calculate wait time:', err);
+    });
+  }
+
   return card;
 }
 
-function calcWaitTime(createdAt) {
+function calcWaitTime(createdAt, triageLevel) {
+  if (!createdAt || !triageLevel) return "–";
+
+  try {
+    // Use realistic waiting time calculation (via API)
+    // This replaces the old "time elapsed" calculation
+    return calculateRealisticWaitTime(triageLevel);
+  } catch {
+    return "–";
+  }
+}
+
+// Fetch realistic waiting time from backend
+async function calculateRealisticWaitTime(triageLevel) {
+  try {
+    const response = await fetch('http://localhost:3000/api/calculate-waiting-time', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        triageLevel: Number(triageLevel),
+        doctorsAvailable: 2
+      })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return data.waitingTimeFormatted || '–';
+    }
+    return '–';
+  } catch (error) {
+    console.warn('Error calculating wait time:', error);
+    return '–';
+  }
+}
+
+function calcWaitTime_OLD(createdAt) {
   if (!createdAt) return "–";
 
   try {
