@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="css/global.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/user-management.css">
 <link rel="stylesheet" href="css/resource-management.css">
 </head>
 
@@ -32,11 +33,11 @@ body { visibility: visible !important; }
     <i class="fas fa-chart-line nav-icon"></i>
     <span class="nav-text">Dashboard</span>
   </a>
-  <a href="user-management.html" class="nav-item active">
+  <a href="user-management.html" class="nav-item">
     <i class="fas fa-users-cog nav-icon"></i>
     <span class="nav-text">User Management</span>
   </a>
-  <a href="resource-management.html" class="nav-item">
+  <a href="resource-management.html" class="nav-item active">
   <i class="fas fa-sliders-h nav-icon"></i>
   <span class="nav-text">Resources</span>
 </a>
@@ -114,9 +115,11 @@ body { visibility: visible !important; }
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 
 <script src="js/firebase-config.js"></script>
+<script src="js/auth-guard.js"></script>
 <script src="js/resource-management.js"></script>
 
 </body>
