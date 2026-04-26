@@ -124,6 +124,7 @@ function getFormData() {
         personalInfo: {
             name: document.getElementById('name').value,
             sex: document.getElementById('sex').value,
+            phoneNumber: document.getElementById('phoneNumber').value,
             age: document.getElementById('age').value,
             dateOfBirth: document.getElementById('dateOfBirth').value
         },
@@ -249,7 +250,7 @@ function validateForm() {
     
     // Required fields validation
     const requiredFields = [
-        'name','age','sex', 'dateOfBirth',
+        'name', 'phoneNumber', 'age', 'sex', 'dateOfBirth',
         'group', 'arrival_mode', 
         'injury', 'mental', 'pain', 'nrs_pain',
         'saturation', 'bt', 'rr', 'hr', 'dbp', 'sbp',
@@ -269,6 +270,14 @@ function validateForm() {
             }
         }
     });
+
+    // Phone number validation
+    const phoneField = document.getElementById('phoneNumber');
+    if (phoneField && phoneField.value.toString().trim()) {
+        if (!validatePhoneNumber(phoneField)) {
+            isValid = false;
+        }
+    }
 
     // Date validation + auto-age
     if (!validateDateOfBirth()) {
@@ -348,6 +357,10 @@ function validateField(event) {
         clearError(field, errorId);
         
         // Additional field-specific validation
+        if (fieldId === 'phoneNumber') {
+            validatePhoneNumber(field);
+        }
+
         if (fieldId === 'dateOfBirth') {
             validateDateOfBirth();
         }
@@ -398,6 +411,41 @@ function clearFieldError(event) {
     const field = event.target;
     const errorId = field.id + 'Error';
     clearError(field, errorId);
+}
+
+// Phone number validation function
+function validatePhoneNumber(field) {
+    const phoneNumber = field.value.toString().trim();
+    const errorId = 'phoneNumberError';
+    
+    // Remove spaces, dashes, and parentheses for validation
+    const cleanedPhone = phoneNumber.replace(/[\s\-()]/g, '');
+    
+    // International phone number validation
+    // Accepts: +1-234-567-8900, 1234567890, (123) 456-7890, +1 234 567 8900
+    // Must be 7-15 digits (international standard)
+    const phoneRegex = /^(\+\d{1,3})?[\d\s\-()]{6,}$/;
+    
+    if (!phoneRegex.test(phoneNumber)) {
+        showError(field, errorId, 'Please enter a valid phone number (7+ digits)');
+        return false;
+    }
+    
+    // Check if cleaned phone has at least 7 digits (minimum phone length)
+    const digitCount = cleanedPhone.replace(/\D/g, '').length;
+    if (digitCount < 7) {
+        showError(field, errorId, 'Phone number must contain at least 7 digits');
+        return false;
+    }
+    
+    // Check if it doesn't exceed 15 digits (international standard)
+    if (digitCount > 15) {
+        showError(field, errorId, 'Phone number is too long (max 15 digits)');
+        return false;
+    }
+    
+    clearError(field, errorId);
+    return true;
 }
 
 function showError(field, errorId, message) {
@@ -504,6 +552,7 @@ async function sendToBackend(patientData) {
         const docData = {
             name: patientData.personalInfo.name,
             sex: patientData.personalInfo.sex,
+            phoneNumber: patientData.personalInfo.phoneNumber,
             age: age,
             dateOfBirth: patientData.personalInfo.dateOfBirth,
             arrivalInfo: patientData.arrivalInfo,
