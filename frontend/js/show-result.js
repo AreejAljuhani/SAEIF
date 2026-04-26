@@ -271,7 +271,7 @@ monitoring: true,
 deviceInfo: deviceInfo,
 monitoringStartedAt: new Date().toISOString(),
 finalCTAS: prediction,
-status: "monitoring",
+status: "waiting",
 updatedAt: new Date().toISOString()
 });
 
