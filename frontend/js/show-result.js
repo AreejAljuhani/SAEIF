@@ -302,6 +302,17 @@ btn.disabled = false;
 });
 }
 
+// ================================
+// CONFIRM RESULT BUTTON
+// ================================
+var confirmBtn = document.getElementById("confirmBtn");
+if (confirmBtn) {
+    confirmBtn.addEventListener("click", function() {
+        // Navigate to patient list page
+        window.location.href = "patient-list.html";
+    });
+}
+
 } catch (error) {
 console.error("Error parsing data:", error);
 document.querySelector(".ctas-desc").textContent = "Error displaying results";
