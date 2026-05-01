@@ -112,20 +112,56 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
-        const now = new Date().toISOString();
+        const nowIso = new Date().toISOString();
+
+        // Recalculate waiting time based on the NEW (final) CTAS.
+        // This keeps the patient-facing wait estimate consistent after override.
+        let waitingTimePayload = null;
+        try {
+          const wtResponse = await fetch('http://localhost:3000/api/calculate-waiting-time', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              triageLevel: chosenLevel,
+              doctorsAvailable: 2,
+              excludePatientId: patientId
+            })
+          });
+
+          if (wtResponse.ok) {
+            const wt = await wtResponse.json();
+            if (wt && wt.success) {
+              waitingTimePayload = {
+                waitingTimeTriageLevel: chosenLevel,
+                waitingTimeMinutes: wt.waitingTimeMinutes,
+                waitingTimeFormatted: wt.waitingTimeFormatted,
+                waitingTimeCalculatedAt: nowIso,
+                waitingTimeDoctorsAvailable: 2,
+                waitingTimePatientsAhead: wt.patientsAhead,
+                waitingTimeDetails: wt.details || null
+              };
+            }
+          }
+        } catch (error) {
+          console.warn('Waiting time recalculation failed (will save override without it):', error);
+        }
 
         await db.collection("patients").doc(patientId).update({
           finalCTAS: chosenLevel,
           overrideReason: reason,
           reclassificationNotes: notes,
-          status: "under-treatment",
-          updatedAt: now
+          ...(waitingTimePayload || {}),
+          updatedAt: nowIso
         });
 
         sessionStorage.setItem(
           "triageResult",
           JSON.stringify({ ...triageResult, finalCTAS: chosenLevel })
         );
+
+        if (waitingTimePayload) {
+          sessionStorage.setItem('waitingTime', JSON.stringify(waitingTimePayload));
+        }
 
         alert(`Reclassification confirmed to CTAS-${chosenLevel}.`);
         window.location.href = "patient-list.html";

@@ -1,6 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("Saeif Real-Time Dashboard connected to Firestore ✔️");
 
+  // If patient documents update frequently (e.g., IoT vitals), Firestore snapshots can fire very often.
+  // Throttle ONLY the waiting-time UI so it doesn't look like it's updating “every second”.
+  const WAITING_TIME_UI_UPDATE_MS = 60000; // 1 minute
+  let lastWaitingTimeUiUpdateAt = 0;
+  let lastWaitingTimeUiValue = null;
+
   if (typeof db === "undefined") {
     console.error("❌ Firestore db is not defined. Make sure firebase-config.js is loaded.");
     return;
@@ -82,7 +88,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const avgMinutes =
       waitingCount > 0 ? Math.round(waitingTotalMinutes / waitingCount) : 0;
     const waitingEl = document.getElementById("avgWaitingTime");
-    if (waitingEl)
-      waitingEl.innerHTML = `${avgMinutes}<span> minutes</span>`;
+    if (waitingEl) {
+      const nowMs = Date.now();
+      const due = (nowMs - lastWaitingTimeUiUpdateAt) >= WAITING_TIME_UI_UPDATE_MS;
+      const changed = avgMinutes !== lastWaitingTimeUiValue;
+
+      if (due && changed) {
+        waitingEl.innerHTML = `${avgMinutes}<span> minutes</span>`;
+        lastWaitingTimeUiUpdateAt = nowMs;
+        lastWaitingTimeUiValue = avgMinutes;
+      }
+    }
   });
 });

@@ -549,6 +549,65 @@ async function sendToBackend(patientData) {
             ? parseInt(patientData.personalInfo.age, 10)
             : calculateAgeFromDOB(patientData.personalInfo.dateOfBirth);
 
+        // Calculate waiting time ONCE (before saving) so it gets stored with the patient document.
+        let waitingTimePayload = null;
+        try {
+            const wtResponse = await fetch('http://localhost:3000/api/calculate-waiting-time', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    triageLevel: aiCTAS,
+                    doctorsAvailable: 2
+                })
+            });
+
+            if (wtResponse.ok) {
+                const wt = await wtResponse.json();
+                if (wt && wt.success) {
+                    let computed = wt;
+
+                    // If backend can't read Firestore, it tends to return patientsAhead=0 for everyone.
+                    // In that case, compute waiting time directly from Firestore via the client SDK.
+                    if (aiCTAS > 1 && Number(wt.patientsAhead) === 0) {
+                        try {
+                            computed = await calculateWaitingTimeFromFirestore(aiCTAS, 2);
+                        } catch (fallbackError) {
+                            console.warn('Waiting time Firestore fallback failed:', fallbackError);
+                            computed = wt;
+                        }
+                    }
+
+                    waitingTimePayload = {
+                        waitingTimeTriageLevel: aiCTAS,
+                        waitingTimeMinutes: computed.waitingTimeMinutes,
+                        waitingTimeFormatted: computed.waitingTimeFormatted,
+                        waitingTimeCalculatedAt: now.toISOString(),
+                        waitingTimeDoctorsAvailable: 2,
+                        waitingTimePatientsAhead: computed.patientsAhead,
+                        waitingTimeDetails: computed.details || wt.details || null
+                    };
+                }
+            } else {
+                // API is down or blocked; try computing from Firestore client.
+                try {
+                    const computed = await calculateWaitingTimeFromFirestore(aiCTAS, 2);
+                    waitingTimePayload = {
+                        waitingTimeTriageLevel: aiCTAS,
+                        waitingTimeMinutes: computed.waitingTimeMinutes,
+                        waitingTimeFormatted: computed.waitingTimeFormatted,
+                        waitingTimeCalculatedAt: now.toISOString(),
+                        waitingTimeDoctorsAvailable: 2,
+                        waitingTimePatientsAhead: computed.patientsAhead,
+                        waitingTimeDetails: computed.details || null
+                    };
+                } catch (fallbackError) {
+                    console.warn('Waiting time Firestore fallback failed (API not ok):', fallbackError);
+                }
+            }
+        } catch (error) {
+            console.warn('Waiting time calculation failed (will save patient without it):', error);
+        }
+
         const docData = {
             name: patientData.personalInfo.name,
             sex: patientData.personalInfo.sex,
@@ -566,7 +625,8 @@ async function sendToBackend(patientData) {
             overrideReason: null,
             status: 'waiting',
             createdAt: now.toISOString(),
-            updatedAt: now.toISOString()
+            updatedAt: now.toISOString(),
+            ...(waitingTimePayload || {})
         };
 
         const docRef = await db.collection('patients').add(docData);
@@ -575,10 +635,15 @@ async function sendToBackend(patientData) {
         sessionStorage.setItem('triageResult', JSON.stringify({
             ...result,
             aiCTAS,
-            patientId: docRef.id
+            patientId: docRef.id,
+            waitingTime: waitingTimePayload
         }));
         sessionStorage.setItem('patientData', JSON.stringify(patientData));
         sessionStorage.setItem('patientId', docRef.id);
+
+        if (waitingTimePayload) {
+            sessionStorage.setItem('waitingTime', JSON.stringify(waitingTimePayload));
+        }
 
         setTimeout(() => {
             window.location.href = 'show-result.html';
@@ -604,5 +669,66 @@ function calculateAgeFromDOB(dob) {
     }
 
     return age;
+}
+
+// ---------------------------------
+// Waiting time fallback (Firestore client)
+// ---------------------------------
+const TRIAGE_AVG_TIMES = {
+    1: 0,
+    2: 10,
+    3: 20,
+    4: 30,
+    5: 40
+};
+
+function formatWaitingTime(minutes) {
+    if (minutes === 0) return 'Immediate';
+    if (minutes < 10) return '< 10 minutes';
+    if (minutes < 30) return Math.round(minutes / 5) * 5 + ' minutes';
+    if (minutes < 60) return Math.round(minutes / 5) * 5 + ' minutes';
+
+    const hours = Math.ceil(minutes / 60);
+    if (hours === 1) return '1 hour';
+    if (hours <= 4) return hours + ' hours';
+    return '4+ hours';
+}
+
+async function calculateWaitingTimeFromFirestore(triageLevel, doctorsAvailable = 2) {
+    const level = Number(triageLevel);
+    const doctors = Number(doctorsAvailable) || 2;
+
+    if (!Number.isFinite(level) || level < 1 || level > 5) {
+        throw new Error('Invalid triage level');
+    }
+
+    const snapshot = await db.collection('patients')
+        .where('status', '==', 'waiting')
+        .get();
+
+    let patientsAhead = 0;
+    snapshot.forEach(doc => {
+        const data = doc.data() || {};
+        const otherLevel = Number(data.triageLevel || data.finalCTAS || data.aiCTAS);
+        if (Number.isFinite(otherLevel) && otherLevel <= level) {
+            patientsAhead++;
+        }
+    });
+
+    const effectiveQueue = doctors > 0 ? patientsAhead / doctors : patientsAhead;
+    const avgTime = TRIAGE_AVG_TIMES[level] ?? 30;
+    const waitingTimeMinutes = Math.ceil(effectiveQueue * avgTime);
+
+    return {
+        waitingTimeMinutes,
+        waitingTimeFormatted: formatWaitingTime(waitingTimeMinutes),
+        patientsAhead,
+        details: {
+            effectiveQueue: Number(effectiveQueue.toFixed(2)),
+            averageTime: avgTime,
+            availableDoctors: doctors,
+            formula: `(${patientsAhead} ÷ ${doctors}) × ${avgTime}min = ${waitingTimeMinutes}min`
+        }
+    };
 }
 

@@ -6,6 +6,70 @@ var startMonitoringBtn = null; // Will be created dynamically
 
 var currentPatientId = null;
 
+// Frontend fallback waiting-time calculator (uses Firebase client SDK).
+// This is used when the backend can't read Firestore (e.g., missing firebase-admin credentials).
+var TRIAGE_AVG_TIMES = {
+1: 0,
+2: 10,
+3: 20,
+4: 30,
+5: 40
+};
+
+function formatWaitingTime(minutes) {
+if (minutes === 0) return 'Immediate';
+if (minutes < 10) return '< 10 minutes';
+if (minutes < 30) return Math.round(minutes / 5) * 5 + ' minutes';
+if (minutes < 60) return Math.round(minutes / 5) * 5 + ' minutes';
+
+var hours = Math.ceil(minutes / 60);
+if (hours === 1) return '1 hour';
+if (hours <= 4) return hours + ' hours';
+return '4+ hours';
+}
+
+async function calculateWaitingTimeFromFirestore(triageLevel, doctorsAvailable, excludePatientId) {
+var level = Number(triageLevel);
+var doctors = Number(doctorsAvailable) || 2;
+
+if (!Number.isFinite(level) || level < 1 || level > 5) {
+throw new Error('Invalid triage level');
+}
+
+var snapshot = await db.collection('patients')
+.where('status', '==', 'waiting')
+.get();
+
+var patientsAhead = 0;
+snapshot.forEach(function (doc) {
+if (excludePatientId && doc.id === excludePatientId) return;
+
+var data = doc.data() || {};
+var otherLevel = Number(data.triageLevel || data.finalCTAS || data.aiCTAS);
+if (Number.isFinite(otherLevel) && otherLevel <= level) {
+patientsAhead++;
+}
+});
+
+var effectiveQueue = doctors > 0 ? patientsAhead / doctors : patientsAhead;
+var avgTime = (TRIAGE_AVG_TIMES[level] === undefined || TRIAGE_AVG_TIMES[level] === null)
+? 30
+: TRIAGE_AVG_TIMES[level];
+
+var waitingTimeMinutes = Math.ceil(effectiveQueue * avgTime);
+return {
+waitingTimeMinutes: waitingTimeMinutes,
+waitingTimeFormatted: formatWaitingTime(waitingTimeMinutes),
+patientsAhead: patientsAhead,
+details: {
+effectiveQueue: Number(effectiveQueue.toFixed(2)),
+averageTime: avgTime,
+availableDoctors: doctors,
+formula: '(' + patientsAhead + ' ÷ ' + doctors + ') × ' + avgTime + 'min = ' + waitingTimeMinutes + 'min'
+}
+};
+}
+
 function normalizeCtasValue(value) {
 if (value === undefined || value === null) {
 return NaN;
@@ -146,47 +210,105 @@ var ctasDescriptions = {
 // CALCULATE REALISTIC WAITING TIME
 // ================================
 async function calculateAndDisplayWaitingTime() {
+    const waitingEl = document.getElementById("waitingTime");
+    if (!waitingEl) return;
+
+    // 1) Prefer the value that was calculated & saved during registration,
+    //    but only if it's for the same CTAS level we are currently displaying.
     try {
-        // Call backend to calculate waiting time
+        const saved = sessionStorage.getItem('waitingTime');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            const sameLevel =
+                !parsed || parsed.waitingTimeTriageLevel === undefined ||
+                Number(parsed.waitingTimeTriageLevel) === Number(prediction);
+
+            const isImmediate = String(parsed && parsed.waitingTimeFormatted ? parsed.waitingTimeFormatted : '')
+                .trim()
+                .toLowerCase() === 'immediate';
+
+            // If a stored value is "Immediate" for CTAS>1, it's often stale from when backend
+            // couldn't read Firestore. Recalculate in that case.
+            if (parsed && parsed.waitingTimeFormatted && sameLevel && !(Number(prediction) > 1 && isImmediate)) {
+                waitingEl.textContent = parsed.waitingTimeFormatted;
+                return;
+            }
+        }
+    } catch (_) {
+        // ignore
+    }
+
+    // 2) If we have a patient id, try reading from Firestore.
+    try {
+        if (currentPatientId) {
+            const snap = await db.collection('patients').doc(currentPatientId).get();
+            if (snap && snap.exists) {
+                const patient = snap.data() || {};
+                const sameLevel =
+                    patient.waitingTimeTriageLevel === undefined ||
+                    Number(patient.waitingTimeTriageLevel) === Number(prediction);
+
+                const isImmediate = String(patient.waitingTimeFormatted || '')
+                    .trim()
+                    .toLowerCase() === 'immediate';
+
+                if (patient.waitingTimeFormatted && sameLevel && !(Number(prediction) > 1 && isImmediate)) {
+                    waitingEl.textContent = patient.waitingTimeFormatted;
+                    return;
+                }
+            }
+        }
+    } catch (error) {
+        console.warn('Could not read stored waiting time from Firestore:', error);
+    }
+
+    // 3) Backward-compatibility for older patient records: calculate ONCE, then persist.
+    try {
+        if (!currentPatientId) throw new Error('Missing patientId');
+
         const response = await fetch('http://localhost:3000/api/calculate-waiting-time', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 triageLevel: prediction,
-                doctorsAvailable: 2  // You can make this dynamic from settings
+                doctorsAvailable: 2,
+                excludePatientId: currentPatientId
             })
         });
 
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Waiting time calculated:', data);
-            
-            // Display the calculated waiting time
-            document.getElementById("waitingTime").textContent = 
-                data.waitingTimeFormatted || 'Loading...';
-            
-            // Optionally store details for debugging
-            if (window.DEBUG_MODE) {
-                console.log('Patients ahead:', data.patientsAhead);
-                console.log('Formula:', data.details.formula);
+        if (!response.ok) throw new Error('Waiting time API failed');
+        const data = await response.json();
+
+        var computed = data;
+
+        // If backend can't read Firestore, it will return patientsAhead=0 for everyone.
+        // In that case, fall back to computing from Firestore via the client SDK.
+        if (Number(prediction) > 1 && Number(data.patientsAhead) === 0) {
+            try {
+                computed = await calculateWaitingTimeFromFirestore(prediction, 2, currentPatientId);
+            } catch (fallbackError) {
+                console.warn('Waiting time Firestore fallback failed:', fallbackError);
+                computed = data;
             }
-        } else {
-            // Fallback to default times if calculation fails
-            const defaultTimes = {
-                1: "Immediate",
-                2: "< 10 minutes",
-                3: "20-30 minutes",
-                4: "30-60 minutes",
-                5: "60+ minutes"
-            };
-            document.getElementById("waitingTime").textContent = 
-                defaultTimes[prediction] || "--";
         }
+
+        const formatted = computed.waitingTimeFormatted || data.waitingTimeFormatted || '–';
+        waitingEl.textContent = formatted;
+
+        const payload = {
+            waitingTimeTriageLevel: Number(prediction),
+            waitingTimeMinutes: computed.waitingTimeMinutes,
+            waitingTimeFormatted: formatted,
+            waitingTimeCalculatedAt: new Date().toISOString(),
+            waitingTimeDoctorsAvailable: 2,
+            waitingTimePatientsAhead: computed.patientsAhead,
+            waitingTimeDetails: computed.details || data.details || null
+        };
+
+        await db.collection('patients').doc(currentPatientId).update(payload);
+        sessionStorage.setItem('waitingTime', JSON.stringify(payload));
     } catch (error) {
-        console.error('Error calculating waiting time:', error);
-        // Fallback to default times
+        console.error('Error calculating/saving waiting time:', error);
         const defaultTimes = {
             1: "Immediate",
             2: "< 10 minutes",
@@ -194,8 +316,7 @@ async function calculateAndDisplayWaitingTime() {
             4: "30-60 minutes",
             5: "60+ minutes"
         };
-        document.getElementById("waitingTime").textContent = 
-            defaultTimes[prediction] || "--";
+        waitingEl.textContent = defaultTimes[prediction] || "--";
     }
 }
 

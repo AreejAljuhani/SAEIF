@@ -8,10 +8,15 @@ const { calculateWaitingTime, formatWaitingTime } = require('../utils/queueManag
 // Initialize Firebase Admin (if not already initialized)
 if (!admin.apps.length) {
     try {
-        admin.initializeApp({
-            projectId: process.env.FIREBASE_PROJECT_ID || 'saeif-healthcare',
-            databaseURL: process.env.FIREBASE_DB_URL
-        });
+        const initOptions = {
+            // Keep this in sync with frontend/js/firebase-config.js (projectId)
+            projectId: process.env.FIREBASE_PROJECT_ID || 'saeif-9eceb'
+        };
+        if (process.env.FIREBASE_DB_URL) {
+            initOptions.databaseURL = process.env.FIREBASE_DB_URL;
+        }
+
+        admin.initializeApp(initOptions);
     } catch (error) {
         console.log('Firebase already initialized or error:', error.message);
     }
@@ -19,7 +24,7 @@ if (!admin.apps.length) {
 
 router.post('/calculate-waiting-time', async (req, res) => {
     try {
-        const { triageLevel, doctorsAvailable = 2 } = req.body;
+        const { triageLevel, doctorsAvailable = 2, excludePatientId = null } = req.body;
         
         if (!triageLevel || triageLevel < 1 || triageLevel > 5) {
             return res.status(400).json({ 
@@ -27,7 +32,7 @@ router.post('/calculate-waiting-time', async (req, res) => {
             });
         }
         
-        const result = await calculateWaitingTime(triageLevel, doctorsAvailable);
+        const result = await calculateWaitingTime(triageLevel, doctorsAvailable, excludePatientId);
         
         if (!result.success) {
             return res.status(500).json({ error: result.error });

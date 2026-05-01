@@ -42,7 +42,9 @@ async function getWaitingQueue() {
 
         return waitingPatients;
     } catch (error) {
-        console.error('Error getting waiting queue:', error);
+        // If firebase-admin isn't authenticated or points to the wrong project,
+        // Firestore reads will fail and the queue will appear empty.
+        console.error('Error getting waiting queue (Firestore):', error);
         return [];
     }
 }
@@ -52,11 +54,13 @@ async function getWaitingQueue() {
  * @param {number} triageLevel - Patient's triage level (1-5)
  * @returns {Promise<number>} Number of patients ahead
  */
-async function countPatientsAhead(triageLevel) {
+async function countPatientsAhead(triageLevel, excludePatientId = null) {
     const queue = await getWaitingQueue();
-    
+
     let patientsAhead = 0;
     queue.forEach(patient => {
+        if (excludePatientId && patient.id === excludePatientId) return;
+
         // Count if patient has same or higher priority (lower number = higher priority)
         if (patient.triageLevel && patient.triageLevel <= triageLevel) {
             patientsAhead++;
@@ -72,15 +76,17 @@ async function countPatientsAhead(triageLevel) {
  * @param {number} availableDoctors - Number of available doctors (default: 2)
  * @returns {Promise<Object>} Waiting time calculation result
  */
-async function calculateWaitingTime(triageLevel, availableDoctors = 2) {
+async function calculateWaitingTime(triageLevel, availableDoctors = 2, excludePatientId = null) {
     try {
         // Validate input
-        if (!triageLevel || triageLevel < 1 || triageLevel > 5) {
+        const level = Number(triageLevel);
+
+        if (!Number.isFinite(level) || level < 1 || level > 5) {
             throw new Error('Invalid triage level. Must be 1-5.');
         }
 
         // Get count of patients ahead
-        const patientsAhead = await countPatientsAhead(triageLevel);
+        const patientsAhead = await countPatientsAhead(level, excludePatientId);
 
         // Calculate effective queue considering parallel doctors
         const effectiveQueue = availableDoctors > 0 
@@ -88,14 +94,15 @@ async function calculateWaitingTime(triageLevel, availableDoctors = 2) {
             : patientsAhead;
 
         // Get average time for this triage level
-        const avgTime = TRIAGE_AVG_TIMES[triageLevel] || 30;
+        // Use nullish coalescing so CTAS-1 (0 minutes) stays 0.
+        const avgTime = TRIAGE_AVG_TIMES[level] ?? 30;
 
         // Calculate total waiting time in minutes
         const waitingTimeMinutes = Math.ceil(effectiveQueue * avgTime);
 
         return {
             success: true,
-            triageLevel,
+            triageLevel: level,
             waitingTimeMinutes,
             patientsAhead,
             effectiveQueue: Number(effectiveQueue.toFixed(2)),
