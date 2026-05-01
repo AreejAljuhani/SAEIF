@@ -489,6 +489,18 @@ function clearForm() {
 async function registerPatient(patientData) {
     const submitBtn = document.getElementById('submitButton');
     const originalText = submitBtn.innerHTML;
+
+    // Best-effort: pre-open a tab during the user gesture to avoid popup blockers.
+    // We'll navigate it to WhatsApp only after CTAS + waiting time are available.
+    let whatsappDraftWindow = null;
+    try {
+        const phone = patientData?.personalInfo?.phoneNumber;
+        if (phone && String(phone).trim()) {
+            whatsappDraftWindow = window.open('', '_blank', 'noopener');
+        }
+    } catch (_) {
+        whatsappDraftWindow = null;
+    }
     
     try {
         // Show loading state
@@ -496,7 +508,7 @@ async function registerPatient(patientData) {
         submitBtn.disabled = true;
         
         // Send to backend for registration and ML prediction
-        await sendToBackend(patientData);
+        await sendToBackend(patientData, whatsappDraftWindow);
         
         // Show success message
         document.getElementById('successMessage').style.display = 'flex';
@@ -511,7 +523,7 @@ async function registerPatient(patientData) {
     }
 }
 
-async function sendToBackend(patientData) {
+async function sendToBackend(patientData, whatsappDraftWindow = null) {
     try {
         const classifyResponse = await fetch('http://localhost:3000/api/classify', {
             method: 'POST',
@@ -645,6 +657,47 @@ async function sendToBackend(patientData) {
             sessionStorage.setItem('waitingTime', JSON.stringify(waitingTimePayload));
         }
 
+        // ================================
+        // WhatsApp message (free / nurse sends)
+        // ================================
+        try {
+            const patientName = patientData?.personalInfo?.name || 'Patient';
+            const rawPhone = patientData?.personalInfo?.phoneNumber;
+
+            let waitMinutes = waitingTimePayload?.waitingTimeMinutes;
+            let waitFormatted = waitingTimePayload?.waitingTimeFormatted;
+
+            if (!Number.isFinite(Number(waitMinutes)) || !waitFormatted) {
+                try {
+                    const computed = await calculateWaitingTimeFromFirestore(aiCTAS, 2);
+                    if (!Number.isFinite(Number(waitMinutes))) {
+                        waitMinutes = computed?.waitingTimeMinutes;
+                    }
+                    if (!waitFormatted) {
+                        waitFormatted = computed?.waitingTimeFormatted;
+                    }
+                } catch (_) {
+                    // ignore
+                }
+            }
+
+            const message = buildWhatsAppMessage({
+                patientName,
+                waitingTimeMinutes: waitMinutes,
+                waitingTimeFormatted: waitFormatted
+            });
+
+            const url = buildWhatsAppUrl(rawPhone, message);
+            if (url) {
+                sessionStorage.setItem('whatsappUrl', url);
+                openWhatsAppDraft(url, whatsappDraftWindow);
+            } else {
+                sessionStorage.removeItem('whatsappUrl');
+            }
+        } catch (whatsError) {
+            console.warn('WhatsApp draft open failed:', whatsError);
+        }
+
         setTimeout(() => {
             window.location.href = 'show-result.html';
         }, 1500);
@@ -730,5 +783,79 @@ async function calculateWaitingTimeFromFirestore(triageLevel, doctorsAvailable =
             formula: `(${patientsAhead} ÷ ${doctors}) × ${avgTime}min = ${waitingTimeMinutes}min`
         }
     };
+}
+
+// ---------------------------------
+// WhatsApp helpers (free: opens a prefilled draft)
+// ---------------------------------
+const DEFAULT_COUNTRY_CODE = '966';
+
+function normalizePhoneForWhatsApp(rawPhone) {
+    if (!rawPhone) return null;
+    let digits = String(rawPhone).replace(/\D/g, '');
+    if (!digits) return null;
+
+    // 00XXXXXXXX -> XXXXXXXXX
+    if (digits.startsWith('00')) digits = digits.slice(2);
+
+    // Saudi-friendly normalization: 05XXXXXXXX -> 9665XXXXXXXX
+    // If you use another country, set DEFAULT_COUNTRY_CODE accordingly or require intl format.
+    if (digits.length === 10 && digits.startsWith('05')) {
+        digits = DEFAULT_COUNTRY_CODE + digits.slice(1);
+    } else if (digits.length === 9 && digits.startsWith('5')) {
+        digits = DEFAULT_COUNTRY_CODE + digits;
+    }
+
+    // WhatsApp requires country code without '+'
+    if (digits.length < 9 || digits.length > 15) return null;
+    return digits;
+}
+
+function buildWhatsAppMessage({ patientName, waitingTimeMinutes, waitingTimeFormatted }) {
+    const safeName = patientName ? String(patientName).trim() : '';
+    const minutesNum = Number(waitingTimeMinutes);
+    const minutes = Number.isFinite(minutesNum) ? Math.max(0, Math.round(minutesNum)) : null;
+    const fallback = waitingTimeFormatted ? String(waitingTimeFormatted) : null;
+
+    const xAr = minutes !== null ? `${minutes} دقيقة` : (fallback ? fallback : 'غير متوفر');
+    const xEn = minutes !== null ? `${minutes} minutes` : (fallback ? fallback : 'N/A');
+
+    return (
+`مرحبًا${safeName ? ' ' + safeName : ''}،
+نود إبلاغك بأن وقت الانتظار المتوقع هو ${xAr}.
+نُقدّر صبرك وتفهمك، ونعمل على خدمتك بأسرع وقت ممكن.
+
+في حال شعرت بأي أعراض جديدة أو ازدياد في شدة الأعراض، يرجى التوجه مباشرة إلى الممرضة أو إبلاغ الطاقم الطبي فورًا.
+
+Hello${safeName ? ' ' + safeName : ''},
+We would like to inform you that your estimated waiting time is ${xEn}.
+We truly appreciate your patience and understanding, and we are doing our best to assist you as quickly as possible.
+
+If you experience any new symptoms or notice a worsening in your condition, please approach the nurse or inform the medical staff immediately.`
+    );
+}
+
+function buildWhatsAppUrl(rawPhone, messageText) {
+    const phone = normalizePhoneForWhatsApp(rawPhone);
+    if (!phone) return null;
+    const text = encodeURIComponent(String(messageText || ''));
+    return `https://wa.me/${phone}?text=${text}`;
+}
+
+function openWhatsAppDraft(url, draftWindow) {
+    try {
+        if (draftWindow && !draftWindow.closed) {
+            draftWindow.location.href = url;
+            return;
+        }
+    } catch (_) {
+        // ignore
+    }
+
+    try {
+        window.open(url, '_blank', 'noopener');
+    } catch (_) {
+        // ignore
+    }
 }
 
