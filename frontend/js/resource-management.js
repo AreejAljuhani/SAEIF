@@ -9,10 +9,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = doc.data();
 
                 document.getElementById("doctorsInput").value = data.doctorsAvailable || 0;
-                document.getElementById("bedsInput").value = data.bedsAvailable || 0;
+                document.getElementById("nursesInput").value  = data.nursesAvailable  || 0;
+                document.getElementById("bedsInput").value    = data.bedsAvailable    || 0;
+                document.getElementById("holidayInput").value = data.isHoliday        || 0;
 
                 document.getElementById("doctorsCount").innerText = data.doctorsAvailable || 0;
-                document.getElementById("bedsCount").innerText = data.bedsAvailable || 0;
+                document.getElementById("nursesCount").innerText  = data.nursesAvailable  || 0;
+                document.getElementById("bedsCount").innerText    = data.bedsAvailable    || 0;
             }
 
         }).catch(err => console.log(err));
@@ -24,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = doc.data();
 
             document.getElementById("doctorsCount").innerText = data.doctorsAvailable || 0;
+            document.getElementById("nursesCount").innerText  = data.nursesAvailable  || 0;
             document.getElementById("bedsCount").innerText = data.bedsAvailable || 0;
         }
     });
@@ -36,6 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }, { merge: true });
     }
 
+    window.updateNurses = function () {
+    let val = parseInt(document.getElementById("nursesInput").value || 0);
+    db.collection("settings").doc("resources").set({ nursesAvailable: val }, { merge: true });
+    }
+
     window.updateBeds = function () {
         let val = parseInt(document.getElementById("bedsInput").value || 0);
 
@@ -43,6 +52,11 @@ document.addEventListener("DOMContentLoaded", () => {
             bedsAvailable: val
         }, { merge: true });
     }
+
+    window.updateHoliday = function () {
+    let val = parseInt(document.getElementById("holidayInput").value || 0);
+    db.collection("settings").doc("resources").set({ isHoliday: val }, { merge: true });
+  }
 
     loadResources();
 

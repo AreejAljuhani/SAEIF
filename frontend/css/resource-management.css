@@ -218,3 +218,20 @@ button[onclick*="update"]:active {
     font-size: 0.85rem;
   }
 }
+.form-group select {
+    padding: 0.875rem 1.125rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: var(--text-dark);
+    background: var(--white);
+    outline: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.form-group select:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.1);
+}

@@ -75,6 +75,12 @@ body { visibility: visible !important; }
         <div class="stat-number" id="doctorsCount">0</div>
         <div class="stat-label">Doctors Available</div>
       </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-user-nurse"></i></div>
+        <div class="stat-number" id="nursesCount">0</div>
+        <div class="stat-label">Nurses Available</div>
+      </div>
 
       <div class="stat-card">
         <div class="stat-icon"><i class="fas fa-procedures"></i></div>
@@ -96,21 +102,33 @@ body { visibility: visible !important; }
           <input type="number" id="doctorsInput" min="0" placeholder="0">
         </div>
 
+      <div class="form-group">
+          <label for="nursesInput">Nurses</label>
+          <input type="number" id="nursesInput" min="0" placeholder="0">
+      </div>
+
         <div class="form-group">
           <label for="bedsInput">Beds</label>
           <input type="number" id="bedsInput" min="0" placeholder="0">
+        </div>
+
+         <div class="form-group">
+          <label for="holidayInput">Is Holiday</label>
+          <select id="holidayInput">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
         </div>
       </div>
 
       <div class="resource-actions">
         <button onclick="updateDoctors()">Update Doctors</button>
+        <button onclick="updateNurses()">Update Nurses</button>
         <button onclick="updateBeds()">Update Beds</button>
+         <button onclick="updateHoliday()">Update Holiday</button>
       </div>
-
     </section>
-
   </main>
-
 </div>
 
 <!-- Firebase -->
