@@ -2,12 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const admin = require('firebase-admin');
+const path = require('path');
 
 // Initialize Firebase Admin BEFORE loading routes
 if (!admin.apps.length) {
     try {
+        const serviceAccount = require('./serviceAccount.json');
         admin.initializeApp({
-            projectId: process.env.FIREBASE_PROJECT_ID || 'saeif-healthcare'
+            credential: admin.credential.cert(serviceAccount)
         });
         console.log('✅ Firebase Admin initialized');
     } catch (error) {
@@ -18,6 +20,7 @@ if (!admin.apps.length) {
 
 // NOW load routes (after Firebase is initialized)
 const classifyRoute = require('./routes/classify');
+const crowdingRoute = require('./routes/crowding');
 
 const app = express();
 
@@ -29,6 +32,7 @@ app.use(bodyParser.json());
 
 // API routes
 app.use('/api', classifyRoute);
+app.use('/api/crowding', crowdingRoute);
 
 // Test endpoint
 app.get('/', (req, res) => {
