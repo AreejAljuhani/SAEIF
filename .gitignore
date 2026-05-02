@@ -9,3 +9,6 @@ __pycache__/
 
 # OS/editor
 .vscode/
+
+# Firebase credentials
+backend/serviceAccount.json
