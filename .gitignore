@@ -12,3 +12,6 @@ __pycache__/
 
 # Firebase credentials
 backend/serviceAccount.json
+
+# Environment variables
+backend/.env
