@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="required-role" content="admin">
+<title>Saeif — Crowding Dashboard</title>
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="css/crowding-dashboard.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<style>body { visibility: visible !important; }</style>
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="assets/saeif-logo1.png" class="logo-img"
+        onerror="this.style.display='none'">
+    </div>
+    <nav class="sidebar-nav">
+      <a href="admin-dashboard.html" class="nav-item">
+        <i class="fas fa-chart-line nav-icon"></i>
+        <span class="nav-text">Dashboard</span>
+      </a>
+      <a href="user-management.html" class="nav-item">
+        <i class="fas fa-users-cog nav-icon"></i>
+        <span class="nav-text">User Management</span>
+      </a>
+      <a href="resource-management.html" class="nav-item">
+        <i class="fas fa-sliders-h nav-icon"></i>
+        <span class="nav-text">Resources</span>
+      </a>
+      <a href="crowding-fellow.html" class="nav-item active">
+        <i class="fas fa-hospital nav-icon"></i>
+        <span class="nav-text">Crowding Fellow</span>
+      </a>
+      <a href="admin-alerts.html" class="nav-item">
+        <i class="fas fa-bell nav-icon"></i>
+        <span class="nav-text">Alerts</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-info">
+        <div class="admin-avatar"><i class="fas fa-user-shield"></i></div>
+        <div class="admin-details">
+          <span class="admin-name" id="currentUserName">Admin</span>
+          <span class="admin-role">Administrator</span>
+        </div>
+      </div>
+      <button class="signout-btn" onclick="signOut()">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- Header -->
+    <div class="dashboard-header">
+      <div>
+        <h1 class="dashboard-title">ED Crowding Dashboard</h1>
+        <p class="dashboard-subtitle">AI-powered real-time crowding prediction </p>
+      </div>
+      <div class="last-updated">
+        <i class="fas fa-sync-alt" id="refreshIcon"></i>
+        <span>Last updated: <strong id="lastUpdated">—</strong></span>
+        <button class="refresh-btn" onclick="loadPrediction()">Refresh</button>
+      </div>
+    </div>
+
+    <!-- Crowding Level Banner -->
+    <div class="crowding-banner" id="crowdingBanner">
+      <div class="banner-left">
+        <div class="banner-icon" id="bannerIcon">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
+        <div class="banner-text">
+          <div class="banner-label">Current Crowding Level</div>
+          <div class="banner-level" id="crowdingLabel">Loading...</div>
+        </div>
+      </div>
+      <div class="banner-probabilities">
+        <div class="prob-item">
+          <div class="prob-label">Low</div>
+          <div class="prob-bar-wrap">
+            <div class="prob-bar low-bar" id="probLowBar"></div>
+          </div>
+          <div class="prob-val" id="probLow">—</div>
+        </div>
+        <div class="prob-item">
+          <div class="prob-label">Medium</div>
+          <div class="prob-bar-wrap">
+            <div class="prob-bar med-bar" id="probMedBar"></div>
+          </div>
+          <div class="prob-val" id="probMed">—</div>
+        </div>
+        <div class="prob-item">
+          <div class="prob-label">High</div>
+          <div class="prob-bar-wrap">
+            <div class="prob-bar high-bar" id="probHighBar"></div>
+          </div>
+          <div class="prob-val" id="probHigh">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card blue">
+        <div class="stat-icon"><i class="fas fa-procedures"></i></div>
+        <div class="stat-number" id="statPatients">—</div>
+        <div class="stat-label">Total Patients</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-icon"><i class="fas fa-clock"></i></div>
+        <div class="stat-number" id="statWaiting">—</div>
+        <div class="stat-label">Avg Wait (min)</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="stat-number" id="statHighAcuity">—</div>
+        <div class="stat-label">High Acuity (CTAS 1-2)</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon"><i class="fas fa-user-md"></i></div>
+        <div class="stat-number" id="statDoctors">—</div>
+        <div class="stat-label">Doctors Available</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-icon"><i class="fas fa-procedures"></i></div>
+        <div class="stat-number" id="statBeds">—</div>
+        <div class="stat-label">Beds Available</div>
+      </div>
+      <div class="stat-card teal">
+        <div class="stat-icon"><i class="fas fa-exchange-alt"></i></div>
+        <div class="stat-number" id="statFlow">—</div>
+        <div class="stat-label">Flow Pressure</div>
+      </div>
+    </div>
+
+    <!-- Bottom: Features + Recommendations -->
+    <div class="bottom-grid">
+
+      <!-- Features snapshot -->
+      <div class="card features-card">
+        <h3 class="card-title"><i class="fas fa-table"></i> Input Features Snapshot</h3>
+        <div class="features-table" id="featuresTable">
+          <div class="loading-msg">Loading features...</div>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="card recommendations-card">
+        <h3 class="card-title"><i class="fas fa-lightbulb"></i> Resource Recommendations</h3>
+        <div id="recommendations">
+          <div class="loading-msg">Analyzing...</div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-appcompat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-authcompat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestorecompat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/crowding-dashboard.js"></script>
+</body>
+</html>
