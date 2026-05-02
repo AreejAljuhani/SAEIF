@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Real-time listener on Firestore 👇🔥
+  // Real-time listener on Firestore 
   patientsRef.onSnapshot(snapshot => {
     const now = new Date();
 
@@ -68,10 +68,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Average waiting time calculation
       if (status === "waiting" && createdAt instanceof Date && !isNaN(createdAt)) {
-        const diffMs = now - createdAt;
-        if (diffMs >= 0) waitingTotalMinutes += diffMs / 60000;
+          const diffMs = now - createdAt;
+          const diffMinutes = diffMs / 60000;
+      if (diffMinutes >= 0 && diffMinutes < 1440) {
+        waitingTotalMinutes += diffMinutes;
         waitingCount++;
-      }
+    }
+}
     });
 
     // Update dashboard UI ✨
