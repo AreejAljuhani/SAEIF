@@ -17,7 +17,9 @@
       }
 
       const userData = userDoc.data();
-      const userRole = userData.role;
+      const userRole = String(userData && userData.role ? userData.role : '')
+        .trim()
+        .toLowerCase();
 
       if (pageRole === 'admin' && userRole !== 'admin') {
         window.location.href = 'home.html';
@@ -41,7 +43,15 @@
       if (userNameEl) userNameEl.textContent = userData.name;
 
       const userRoleEl = document.getElementById('currentUserRole');
-      if (userRoleEl) userRoleEl.textContent = userRole === 'admin' ? 'Administrator' : 'Medical Staff';
+      if (userRoleEl) {
+        if (userRole === 'admin') {
+          userRoleEl.textContent = 'Administrator';
+        } else if (userRole === 'nurse') {
+          userRoleEl.textContent = 'Nurse';
+        } else {
+          userRoleEl.textContent = 'Medical Staff';
+        }
+      }
 
     } catch(e) {
       console.error('Auth guard error:', e);

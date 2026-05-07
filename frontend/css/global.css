@@ -34,7 +34,9 @@ body {
 
 .container {
   display: flex;
+  height: 100vh;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -105,10 +107,100 @@ body {
 
 .sidebar-footer {
     width: 100%;
-    padding: 1.5rem;
+  padding: 1.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.sidebar-footer.with-signout {
+  padding: 1.1rem 1.25rem;
+  border-top: 1px solid #2d3748;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+/* Admin-style user block (used in sidebar footer) */
+.admin-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(26, 54, 93, 0.2);
+}
+
+.admin-avatar i {
+  display: block;
+  line-height: 1;
+}
+
+.admin-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--sidebar-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-role {
+  font-size: 0.72rem;
+  color: var(--text-light);
+  opacity: 0.8;
+}
+
+.signout-btn {
+  background: none;
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.signout-btn i {
+  display: block;
+  line-height: 1;
+}
+
+.signout-btn:hover {
+  border-color: #e53e3e;
+  color: #e53e3e;
+}
+
+/* Sidebar-specific tweaks (avoid affecting admin top bars) */
+.sidebar .signout-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-color: #2d3748;
+  color: var(--sidebar-text);
 }
 
 .sidebar-map {

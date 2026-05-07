@@ -50,7 +50,15 @@
       </nav>
 
       <div class="sidebar-footer">
-        <img src="assets/map-icon.png" alt="World map" class="sidebar-map">
+        <div class="admin-info">
+          <div class="admin-avatar"><i class="fas fa-user-nurse"></i></div>
+          <div class="admin-details">
+            <span class="admin-name" id="currentUserName">Nurse</span>
+          </div>
+        </div>
+        <button class="signout-btn" onclick="signOut()" title="Sign out">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
       </div>
     </aside>
 
