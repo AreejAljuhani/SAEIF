@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="required-role" content="admin">
+<title>Saeif — Crowding Alerts</title>
+<style id="flashHide">body{visibility:hidden}</style>
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="css/admin-alerts.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="assets/saeif-logo1.png" class="logo-img"
+        onerror="this.style.display='none'">
+    </div>
+    <nav class="sidebar-nav">
+      <a href="admin-dashboard.html" class="nav-item">
+        <i class="fas fa-chart-line nav-icon"></i>
+        <span class="nav-text">Dashboard</span>
+      </a>
+      <a href="user-management.html" class="nav-item">
+        <i class="fas fa-users-cog nav-icon"></i>
+        <span class="nav-text">User Management</span>
+      </a>
+      <a href="resource-management.html" class="nav-item">
+        <i class="fas fa-sliders-h nav-icon"></i>
+        <span class="nav-text">Resources</span>
+      </a>
+      <a href="crowding-fellow.html" class="nav-item">
+        <i class="fas fa-hospital nav-icon"></i>
+        <span class="nav-text">Crowding Fellow</span>
+      </a>
+      <a href="admin-alerts.html" class="nav-item active">
+        <i class="fas fa-bell nav-icon"></i>
+        <span class="nav-text">Alerts</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-info">
+        <div class="admin-avatar"><i class="fas fa-user-shield"></i></div>
+        <div class="admin-details">
+          <span class="admin-name" id="currentUserName">Admin</span>
+          <span class="admin-role">Administrator</span>
+        </div>
+      </div>
+      <button class="signout-btn" onclick="signOut()">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- Header -->
+    <div class="alerts-header">
+      <div>
+        <h1 class="alerts-title">Crowding Alerts</h1>
+        <p class="alerts-subtitle">Real-time ED crowding notifications </p>
+      </div>
+      <div class="header-actions">
+        <button class="clear-btn" onclick="clearAllAlerts()">
+          <i class="fas fa-check-double"></i> Mark All as Read
+        </button>
+      </div>
+    </div>
+
+    <!-- Current Status Banner -->
+    <div class="current-status-card" id="currentStatusCard">
+      <div class="status-left">
+        <div class="status-icon" id="statusIcon">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
+        <div>
+          <div class="status-label">Current Crowding Level</div>
+          <div class="status-level" id="statusLevel">Loading...</div>
+        </div>
+      </div>
+      <div class="status-right">
+        <button class="view-dash-btn" onclick="location.href='crowding-fellow.html'">
+          <i class="fas fa-chart-bar"></i> View Dashboard
+        </button>
+      </div>
+    </div>
+
+    <!-- Unread Alerts -->
+    <div class="section-header">
+      <h2 class="section-title">
+        <i class="fas fa-exclamation-triangle"></i>
+        Active Alerts
+        <span class="alert-count" id="alertCount">0</span>
+      </h2>
+    </div>
+
+    <div id="alertsList">
+      <div class="empty-alerts">
+        <i class="fas fa-check-circle"></i>
+        <p>No active crowding alerts</p>
+      </div>
+    </div>
+
+    <!-- Alert History -->
+    <div class="section-header" style="margin-top: 2rem;">
+      <h2 class="section-title">
+        <i class="fas fa-history"></i>
+        Alert History
+      </h2>
+    </div>
+
+    <div id="historyList">
+      <div class="empty-alerts">
+        <i class="fas fa-inbox"></i>
+        <p>No alert history</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/admin-alerts.js"></script>
+</body>
+</html>
