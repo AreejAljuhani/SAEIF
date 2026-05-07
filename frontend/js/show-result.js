@@ -466,60 +466,6 @@ document.getElementById("confidenceBox").style.display = "block";
 var actionsDiv = document.querySelector(".actions");
 console.log("Actions Div found:", actionsDiv);
 
-// Add WhatsApp button (manual send, no API / no cost)
-if (actionsDiv && !document.getElementById('whatsappBtn')) {
-var whatsappBtn = document.createElement('button');
-whatsappBtn.id = 'whatsappBtn';
-whatsappBtn.className = 'btn secondary';
-whatsappBtn.type = 'button';
-whatsappBtn.textContent = 'Send WhatsApp';
-
-whatsappBtn.addEventListener('click', function () {
-try {
-var rawPhone = (patientData && patientData.personalInfo && patientData.personalInfo.phoneNumber)
-? patientData.personalInfo.phoneNumber
-: null;
-
-// Prefer stored URL if present (from registration)
-var storedUrl = null;
-try { storedUrl = sessionStorage.getItem('whatsappUrl'); } catch (_) { storedUrl = null; }
-
-var url = storedUrl;
-if (!url) {
-var wt = getWaitingTimeForMessage();
-var msg = buildWhatsAppMessage({
-patientName: (patientData && patientData.personalInfo && patientData.personalInfo.name) ? patientData.personalInfo.name : '',
-waitingTimeMinutes: wt ? wt.minutes : null,
-waitingTimeFormatted: wt ? wt.formatted : null
-});
-url = buildWhatsAppUrl(rawPhone, msg);
-}
-
-if (!url) {
-alert('Phone number format is not valid for WhatsApp. Use international format like +9665XXXXXXXX.');
-return;
-}
-
-try { sessionStorage.setItem('whatsappUrl', url); } catch (_) { /* ignore */ }
-window.open(url, '_blank', 'noopener');
-} catch (e) {
-console.warn('WhatsApp open failed:', e);
-}
-});
-
-// Place WhatsApp button under Confirm Result for visibility
-var confirmBtnEl = document.getElementById('confirmBtn');
-if (confirmBtnEl && confirmBtnEl.parentNode === actionsDiv) {
-if (confirmBtnEl.nextSibling) {
-actionsDiv.insertBefore(whatsappBtn, confirmBtnEl.nextSibling);
-} else {
-actionsDiv.appendChild(whatsappBtn);
-}
-} else {
-actionsDiv.appendChild(whatsappBtn);
-}
-}
-
 if (actionsDiv && !startMonitoringBtn) {
 startMonitoringBtn = document.createElement("button");
 startMonitoringBtn.id = "startMonitoringBtn";
@@ -635,8 +581,52 @@ btn.disabled = false;
 var confirmBtn = document.getElementById("confirmBtn");
 if (confirmBtn) {
     confirmBtn.addEventListener("click", function() {
-        // Navigate to patient list page
-        window.location.href = "patient-list.html";
+        try {
+            var rawPhone = (patientData && patientData.personalInfo && patientData.personalInfo.phoneNumber)
+                ? patientData.personalInfo.phoneNumber
+                : null;
+
+            // Prefer stored URL if present (built during registration)
+            var storedUrl = null;
+            try { storedUrl = sessionStorage.getItem('whatsappUrl'); } catch (_) { storedUrl = null; }
+
+            var url = storedUrl;
+            if (!url) {
+                var wt = getWaitingTimeForMessage();
+                var msg = buildWhatsAppMessage({
+                    patientName: (patientData && patientData.personalInfo && patientData.personalInfo.name) ? patientData.personalInfo.name : '',
+                    waitingTimeMinutes: wt ? wt.minutes : null,
+                    waitingTimeFormatted: wt ? wt.formatted : null
+                });
+                url = buildWhatsAppUrl(rawPhone, msg);
+            }
+
+            if (!url) {
+                // If no valid WhatsApp target, fall back to dashboard.
+                window.location.href = "patient-list.html";
+                return;
+            }
+
+            // Open WhatsApp in a new tab/window, then redirect this tab to ED Patient Board.
+            try {
+                var waWin = window.open(url, '_blank', 'noopener,noreferrer');
+                try {
+                    if (waWin && typeof waWin.focus === 'function') waWin.focus();
+                } catch (_) {
+                    // ignore
+                }
+            } catch (_) {
+                // ignore (popup blocker, etc.)
+            }
+
+            // Small delay helps some browsers avoid opening a blank about:blank tab.
+            window.setTimeout(function () {
+                window.location.href = 'patient-list.html';
+            }, 150);
+        } catch (e) {
+            console.warn('Confirm -> WhatsApp failed:', e);
+            window.location.href = "patient-list.html";
+        }
     });
 }
 

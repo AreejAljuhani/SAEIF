@@ -489,18 +489,6 @@ function clearForm() {
 async function registerPatient(patientData) {
     const submitBtn = document.getElementById('submitButton');
     const originalText = submitBtn.innerHTML;
-
-    // Best-effort: pre-open a tab during the user gesture to avoid popup blockers.
-    // We'll navigate it to WhatsApp only after CTAS + waiting time are available.
-    let whatsappDraftWindow = null;
-    try {
-        const phone = patientData?.personalInfo?.phoneNumber;
-        if (phone && String(phone).trim()) {
-            whatsappDraftWindow = window.open('', '_blank', 'noopener');
-        }
-    } catch (_) {
-        whatsappDraftWindow = null;
-    }
     
     try {
         // Show loading state
@@ -508,7 +496,7 @@ async function registerPatient(patientData) {
         submitBtn.disabled = true;
         
         // Send to backend for registration and ML prediction
-        await sendToBackend(patientData, whatsappDraftWindow);
+        await sendToBackend(patientData);
         
         // Show success message
         document.getElementById('successMessage').style.display = 'flex';
@@ -523,7 +511,7 @@ async function registerPatient(patientData) {
     }
 }
 
-async function sendToBackend(patientData, whatsappDraftWindow = null) {
+async function sendToBackend(patientData) {
     try {
         const classifyResponse = await fetch('http://localhost:3000/api/classify', {
             method: 'POST',
@@ -690,7 +678,6 @@ async function sendToBackend(patientData, whatsappDraftWindow = null) {
             const url = buildWhatsAppUrl(rawPhone, message);
             if (url) {
                 sessionStorage.setItem('whatsappUrl', url);
-                openWhatsAppDraft(url, whatsappDraftWindow);
             } else {
                 sessionStorage.removeItem('whatsappUrl');
             }
@@ -840,22 +827,5 @@ function buildWhatsAppUrl(rawPhone, messageText) {
     if (!phone) return null;
     const text = encodeURIComponent(String(messageText || ''));
     return `https://wa.me/${phone}?text=${text}`;
-}
-
-function openWhatsAppDraft(url, draftWindow) {
-    try {
-        if (draftWindow && !draftWindow.closed) {
-            draftWindow.location.href = url;
-            return;
-        }
-    } catch (_) {
-        // ignore
-    }
-
-    try {
-        window.open(url, '_blank', 'noopener');
-    } catch (_) {
-        // ignore
-    }
 }
 
