@@ -89,7 +89,7 @@ async function computeFeatures() {
   try {
     const fetch = (await import('node-fetch')).default;
     const apiKey = process.env.WEATHER_API_KEY;
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=Medina,SA&appid=${apiKey}&units=metric`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=Jeddah,SA&appid=${apiKey}&units=metric`;
     const weatherRes = await fetch(url);
     const weatherData = await weatherRes.json();
     temperature = weatherData?.main?.temp || 30;
